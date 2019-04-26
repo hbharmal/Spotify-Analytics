@@ -1,1 +1,1 @@
-#Spotify Analytics Application made in React
+# Spotify Analytics Application made in React (using the SpotifyWeb API)
