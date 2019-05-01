@@ -31,5 +31,8 @@
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot",
     "test": "echo No Tests"
   },
-  "author": "Hussain Bharmal"
+  "author": "Hussain Bharmal",
+  "devDependencies": {
+    "@material-ui/icons": "^3.0.2"
+  }
 }

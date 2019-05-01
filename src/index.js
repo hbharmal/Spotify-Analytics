@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Layout from './layout.js';
 
-import Header from './Components/Header/header.js';
 
 const app = document.getElementById('root');
 
-ReactDOM.render(<Header />, app);
+ReactDOM.render(<Layout />, app);
