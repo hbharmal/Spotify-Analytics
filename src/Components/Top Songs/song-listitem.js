@@ -13,9 +13,8 @@ export default class SongListItem extends React.Component {
     render() {
 
         return (
-            <ListItem>
-                <Avatar>
-                    <ImageIcon />
+            <ListItem key={this.props.key} style={{ width: '100%' }} >
+                <Avatar src={this.props.image} style={{ borderRadius: 0 }}>
                 </Avatar>
                 <ListItemText primary={this.props.text} />
             </ListItem>

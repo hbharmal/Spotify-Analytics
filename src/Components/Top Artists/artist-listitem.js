@@ -8,19 +8,15 @@ export default class ArtistListItem extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            "text": "THIS IS A SAMPLE TEXT"
-        }
     }
 
     render() {
 
         return (
-            <ListItem>
-                <Avatar>
-                    <ImageIcon />
+            <ListItem key={this.props.key} >
+                <Avatar src={this.props.image} style={{ borderRadius: 0 }}>
                 </Avatar>
-                <ListItemText primary={this.state.text} />
+                <ListItemText primary={this.props.text} style={{fontFamily: 'Exo 2'}}/>
             </ListItem>
         )
     }

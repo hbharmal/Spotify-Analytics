@@ -1,4 +1,5 @@
 const initialState = {
+    timeRange: 0,
     songsList: [],
     fetchSongsSuccess: false,
     fetchSongsPending: false 
@@ -28,9 +29,17 @@ export const songsReducer = (state = initialState, action) => {
                 fetchSongsSuccess: false,
                 fetchSongsPending: false
             };
+        
+        case "CHANGE_TIME_RANGE_SONGS":
+            return {
+                ...state, 
+                timeRange: action.range 
+            }
     
         default:
-            return state;
+            return {
+                ...state
+            };
     }
 };
   

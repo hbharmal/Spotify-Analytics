@@ -20,7 +20,7 @@ export const tokenReducer = (state = initialState, action) => {
             }
         default:
             return {
-                state
+                ...state
             }
     };
 

@@ -6,6 +6,8 @@ import List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 
+import RangeButton from './range-button-songs';
+
 const styles = theme => ({
     list: {
         overflow: 'auto',
@@ -15,7 +17,6 @@ const styles = theme => ({
     }, 
     root: {
         width: '100%',
-        maxWidth: 360,
     }
 });
 
@@ -23,37 +24,22 @@ class Songs extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            songItems: []
-        }
-    }
-
-    componentDidUpdate() {
-        console.log(this.props.songs);
-        if (this.props.fetchSongsSuccess) {
-            this.state.songItems = this.props.songs.map(song => (
-                <SongListItem text={song.name}></SongListItem>
-            ));
-        }
-    }
-
-    createTable = () => { 
-        let table = []   
-        for (let i = 0; i < 20; i++) {
-            table.push(< SongListItem />)
-        }
-        return table;
     }
 
     render() {
+
+        const songItems = this.props.songs.map((song, index) => (
+            <SongListItem text={song.name} key={index} image={song.album.images[0].url}></SongListItem>
+        ));
 
         const { classes } = this.props;
         
         return (
             <Paper className={classes.list}>
-                <CardHeader title="Songs" style={{textAlign: 'center', backgroundColor: 'grey'}}/>
-                <List className={classes.root}>
-                    {this.props.fetchSongsSuccess && this.state.songItems}
+                <CardHeader title="Top Songs" style={{textAlign: 'center', backgroundColor: 'grey', position: 'sticky', top: 0, zIndex: 2}}/>
+                <RangeButton />
+                <List className={classes.root} style={{ width: '100%' }}>
+                    {songItems}
                 </List>
             </Paper>
         )

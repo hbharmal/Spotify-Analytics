@@ -5,31 +5,22 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Button from '@material-ui/core/Button';
 
-import { fetchToken } from '../../Actions/tokenAction'; 
 import { fetchArtists } from '../../Actions/artistsAction';
 import { fetchSongs } from '../../Actions/songsAction';
 
+import LoginButton from './login-button'
 
 const styles = theme => ({
     title: {
         color: "white",
         'text-align': "center", 
         'font-size': '32pt'
-    
     }, 
     root: {
         backgroundColor: "grey", 
         height: '100px'
     }, 
-    action: {
-        display: 'flex',
-    },
-    button: {
-        justifyContent: 'center',
-        color: 'primary',
-    }
 });
 
 class Header extends React.Component {
@@ -39,35 +30,27 @@ class Header extends React.Component {
         this.state = {
             title: 'Spotilytics Application'
         }
-        this.handleClick = this.handleClick.bind(this);
     }
 
     componentWillMount() {
         if (this.props.tokenSuccess) {
-            this.props.fetchSongs(this.props.token);
-            this.props.fetchArtists(this.props.token);
+            this.props.fetchSongs(this.props.token, this.props.songsTimeRange);
+            this.props.fetchArtists(this.props.token, this.props.artistsTimeRange);
         }
     }
 
     componentDidUpdate() {
         if (this.props.tokenSuccess) {
-            console.log("UPDATED");
-            console.log(this.props.token);
-            this.props.fetchSongs(this.props.token);
-            this.props.fetchArtists(this.props.token);
+            this.props.fetchSongs(this.props.token, this.props.songsTimeRange);
+            this.props.fetchArtists(this.props.token, this.props.artistsTimeRange);
         }
-    }
-
-    handleClick(e) {
-        var token = this.props.fetchToken();
-        console.log(token);
     }
 
     render() {
         const { classes } = this.props;
         return (
             <Card className={classes.card} >
-                <CardContent>
+                <CardContent style={{padding: '0 0 10px 0'}}>
                     <CardHeader
                         classes={{
                             title: classes.title,
@@ -77,14 +60,8 @@ class Header extends React.Component {
                         title={this.state.title}
                     />
                 </CardContent>
-                <CardActions classes={{
-                    root: classes.button,
-                    
-                }}>
-                    <Button variant="text" color="primary" backgroundcolor="grey"
-                        onClick={this.handleClick}>
-                        Log In With Spotify
-                    </Button>
+                <CardActions style={{justifyContent: 'center', padding: '0 0 0 0'}}>
+                    <LoginButton />
                 </CardActions>
             </Card>
         ) 
@@ -95,14 +72,15 @@ class Header extends React.Component {
 const mapStateToProps = state => {
     return {
         tokenSuccess: state.token.fetchTokenSuccess, 
-        token: state.token.token
+        token: state.token.token,
+        artistsTimeRange: state.artists.timeRange,
+        songsTimeRange: state.songs.timeRange
     }
 };
 
 const mapDispatchToProps = dispatch => ({
-    fetchToken: () => dispatch(fetchToken()),
-    fetchArtists: (token) => dispatch(fetchArtists(token)),
-    fetchSongs: (token) => dispatch(fetchSongs(token))
+    fetchArtists: (token, range) => dispatch(fetchArtists(token, range)),
+    fetchSongs: (token, range) => dispatch(fetchSongs(token, range))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Header));

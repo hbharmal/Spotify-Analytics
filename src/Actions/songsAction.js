@@ -1,3 +1,5 @@
+import { rangeToString } from '../utils';
+
 export const fetchSongsPending = () => {
     return {
         type: 'FETCH_SONGS_PENDING'
@@ -17,9 +19,12 @@ export const fetchSongsError = () => {
     };
 };
 
-export const fetchSongs = (accessToken) => {
+export const fetchSongs = (accessToken, range) => {
+
+    const rangeString = rangeToString(range);
+    
     return dispatch => {
-        const request = new Request(`https://api.spotify.com/v1/me/top/tracks`, {
+        const request = new Request(`https://api.spotify.com/v1/me/top/tracks?time_range=${rangeString}`, {
             headers: new Headers({
                 'Authorization': 'Bearer ' + accessToken
             })
@@ -36,3 +41,12 @@ export const fetchSongs = (accessToken) => {
         });
     };
 };
+
+// Change time range for top artists
+export const changeTimeRangeSongs = (range) => {
+    return {
+        type: 'CHANGE_TIME_RANGE_SONGS',
+        range: range 
+    }
+}
+
