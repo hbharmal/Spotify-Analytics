@@ -6,9 +6,29 @@ export const fetchSongsPending = () => {
     };
 };
 
-export const fetchSongsSuccess = (songs) => {
+export const fetchSongsComplete = () => {
     return {
-        type: 'FETCH_SONGS_SUCCESS', 
+        type: 'FETCH_SONGS_COMPLETE'
+    };
+};
+
+export const fetchShortTermSongsSuccess = (songs) => {
+    return {
+        type: 'FETCH_SHORT_TERM_SONGS_SUCCESS',
+        songs: songs
+    };
+};
+
+export const fetchMediumTermSongsSuccess = (songs) => {
+    return {
+        type: 'FETCH_MEDIUM_TERM_SONGS_SUCCESS',
+        songs: songs
+    };
+};
+
+export const fetchLongTermSongsSuccess = (songs) => {
+    return {
+        type: 'FETCH_LONG_TERM_SONGS_SUCCESS',
         songs: songs
     };
 };
@@ -24,18 +44,22 @@ export const fetchSongs = (accessToken, range) => {
     const rangeString = rangeToString(range);
     
     return dispatch => {
-        const request = new Request(`https://api.spotify.com/v1/me/top/tracks?time_range=${rangeString}`, {
+        const request = new Request(`https://api.spotify.com/v1/me/top/tracks?time_range=${rangeString}&limit=50`, {
             headers: new Headers({
                 'Authorization': 'Bearer ' + accessToken
             })
         });
 
-        dispatch(fetchSongsPending());
-
         fetch(request).then(res => {
             return res.json();
         }).then(res => {
-            dispatch(fetchSongsSuccess(res.items));
+            if (range == 0) {
+                dispatch(fetchShortTermSongsSuccess(res.items));
+            } else if (range == 1) {
+                dispatch(fetchMediumTermSongsSuccess(res.items));
+            } else if (range == 2) {
+                dispatch(fetchLongTermSongsSuccess(res.items));
+            }
         }).catch(err => {
             dispatch(fetchSongsError(err));
         });

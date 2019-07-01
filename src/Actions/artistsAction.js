@@ -6,12 +6,32 @@ export const fetchArtistsPending = () => {
     };
 };
 
-export const fetchArtistsSuccess = (artists) => {
+export const fetchArtistsComplete = () => {
     return {
-        type: 'FETCH_ARTISTS_SUCCESS', 
+        type: 'FETCH_ARTISTS_COMPLETE'
+    }
+}
+
+export const fetchShortTermArtistsSuccess = (artists) => {
+    return {
+        type: 'FETCH_SHORT_TERM_ARTISTS_SUCCESS',
         artists: artists
-    };
-};
+    }
+}
+
+export const fetchMediumTermArtistsSuccess = (artists) => {
+    return {
+        type: 'FETCH_MEDIUM_TERM_ARTISTS_SUCCESS',
+        artists: artists
+    }
+}
+
+export const fetchLongTermArtistsSuccess = (artists) => {
+    return {
+        type: 'FETCH_LONG_TERM_ARTISTS_SUCCESS',
+        artists: artists
+    }
+}
 
 export const fetchArtistsError = () => {
     return {
@@ -24,7 +44,7 @@ export const fetchArtists = (accessToken, range) => {
     const rangeString = rangeToString(range);
 
     return dispatch => {
-        const request = new Request(`https://api.spotify.com/v1/me/top/artists?time_range=${rangeString}`, {
+        const request = new Request(`https://api.spotify.com/v1/me/top/artists?time_range=${rangeString}&limit=50`, {
             headers: new Headers({
                 'Authorization': 'Bearer ' + accessToken
             })
@@ -35,7 +55,13 @@ export const fetchArtists = (accessToken, range) => {
         fetch(request).then(res => {
             return res.json();
         }).then(res => {
-            dispatch(fetchArtistsSuccess(res.items));
+            if (range == 0) {
+                dispatch(fetchShortTermArtistsSuccess(res.items));
+            } else if (range == 1) {
+                dispatch(fetchMediumTermArtistsSuccess(res.items));
+            } else if (range == 2) {
+                dispatch(fetchLongTermArtistsSuccess(res.items));
+            }
         }).catch(err => {
             dispatch(fetchArtistsError(err));
         });
@@ -48,5 +74,14 @@ export const changeTimeRangeArtists = (range) => {
     return {
         type: 'CHANGE_TIME_RANGE_ARTISTS',
         range: range 
+    }
+}
+
+// Add artists IDS to redux store for future processing 
+export const addArtistIds = (ids) => {
+    var uniqueIds = [...new Set(ids)];
+    return {
+        type: 'ADD_ARTIST_IDS',
+        ids: ids 
     }
 }

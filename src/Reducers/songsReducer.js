@@ -1,6 +1,8 @@
 const initialState = {
     timeRange: 0,
-    songsList: [],
+    shortTermSongList: [],
+    mediumTermSongList: [],
+    longTermSongList: [],
     fetchSongsSuccess: false,
     fetchSongsPending: false 
 };
@@ -14,15 +16,34 @@ export const songsReducer = (state = initialState, action) => {
                 ...state,
                 fetchSongsPending: true
             };
+        
+        case "FETCH_SONGS_COMPLETE":
+            return {
+                ...state, 
+                fetchSongsPending: false 
+            }
     
-        case 'FETCH_SONGS_SUCCESS':
+        case "FETCH_SHORT_TERM_SONGS_SUCCESS":
             return {
                 ...state,
-                songsList: action.songs,
+                shortTermSongList: action.songs,
                 fetchSongsSuccess: true,
-                fetchSongsPending: false
             };
-        
+
+        case "FETCH_MEDIUM_TERM_SONGS_SUCCESS":
+            return {
+                ...state,
+                mediumTermSongList: action.songs,
+                fetchSongsSuccess: true,
+            };
+
+        case "FETCH_LONG_TERM_SONGS_SUCCESS":
+            return {
+                ...state,
+                longTermSongList: action.songs,
+                fetchSongsSuccess: true,
+            };
+
         case 'FETCH_SONGS_ERROR':
             return {
                 ...state,
@@ -32,7 +53,7 @@ export const songsReducer = (state = initialState, action) => {
         
         case "CHANGE_TIME_RANGE_SONGS":
             return {
-                ...state, 
+                ...state,
                 timeRange: action.range 
             }
     

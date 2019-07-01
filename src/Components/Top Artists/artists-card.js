@@ -28,7 +28,18 @@ class Artists extends React.Component {
 
     render() {
 
-        const artistItems = this.props.artists.map((artist, index) => (
+        let currentArtistItems = []
+
+        if (this.props.timeRange == 0) {
+            currentArtistItems = this.props.shortTermArtists
+        } else if (this.props.timeRange == 1) {
+            currentArtistItems = this.props.mediumTermArtists
+        } else {
+            currentArtistItems = this.props.longTermArtists
+        }   
+
+
+        const artistItems = currentArtistItems.map((artist, index) => (
             <ArtistListItem text={artist.name} key={index} image={artist.images[0].url}></ArtistListItem>
         )); 
 
@@ -49,11 +60,12 @@ class Artists extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        artists: state.artists.artistsList,
-        fetchArtistsSuccess: state.songs.fetchArtistsSuccess
+        shortTermArtists: state.artists.shortTermArtistList,
+        mediumTermArtists: state.artists.mediumTermArtistList,
+        longTermArtists: state.artists.longTermArtistList,
+        timeRange: state.artists.timeRange,
+        fetchArtistsSuccess: state.artists.fetchArtistsSuccess
     }
 };
 
 export default connect(mapStateToProps, null)(withStyles(styles)(Artists));
-
-

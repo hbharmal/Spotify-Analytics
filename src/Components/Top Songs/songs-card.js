@@ -28,7 +28,17 @@ class Songs extends React.Component {
 
     render() {
 
-        const songItems = this.props.songs.map((song, index) => (
+        let currentSongItems = []
+
+        if (this.props.timeRange == 0) {
+            currentSongItems = this.props.shortTermSongs
+        } else if (this.props.timeRange == 1) {
+            currentSongItems = this.props.mediumTermSongs
+        } else {
+            currentSongItems = this.props.longTermSongs
+        }
+
+        const songItems = currentSongItems.map((song, index) => (
             <SongListItem text={song.name} key={index} image={song.album.images[0].url}></SongListItem>
         ));
 
@@ -48,7 +58,10 @@ class Songs extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        songs: state.songs.songsList,
+        shortTermSongs: state.songs.shortTermSongList,
+        mediumTermSongs: state.songs.mediumTermSongList,
+        longTermSongs: state.songs.longTermSongList,
+        timeRange: state.songs.timeRange,
         fetchSongsSuccess: state.songs.fetchSongsSuccess
     }
 };

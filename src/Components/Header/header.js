@@ -6,8 +6,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 
-import { fetchArtists } from '../../Actions/artistsAction';
-import { fetchSongs } from '../../Actions/songsAction';
+import { fetchArtists, fetchArtistsPending, fetchArtistsComplete } from '../../Actions/artistsAction';
+import { fetchSongs, fetchSongsPending, fetchSongsComplete } from '../../Actions/songsAction';
 
 import LoginButton from './login-button'
 
@@ -33,17 +33,43 @@ class Header extends React.Component {
     }
 
     componentWillMount() {
+
         if (this.props.tokenSuccess) {
-            this.props.fetchSongs(this.props.token, this.props.songsTimeRange);
-            this.props.fetchArtists(this.props.token, this.props.artistsTimeRange);
+            this.props.fetchArtistsPending();
+            this.props.fetchSongsPending();
+            Promise.all([
+                this.props.fetchArtists(this.props.token, 0),
+                this.props.fetchArtists(this.props.token, 1),
+                this.props.fetchArtists(this.props.token, 2),
+                this.props.fetchSongs(this.props.token, 0),
+                this.props.fetchSongs(this.props.token, 1),
+                this.props.fetchSongs(this.props.token, 2)
+            ]).then(() => {
+                this.props.fetchArtistsComplete();
+                this.props.fetchSongsComplete();
+            })
         }
+
     }
 
     componentDidUpdate() {
+
         if (this.props.tokenSuccess) {
-            this.props.fetchSongs(this.props.token, this.props.songsTimeRange);
-            this.props.fetchArtists(this.props.token, this.props.artistsTimeRange);
+            this.props.fetchArtistsPending();
+            this.props.fetchSongsPending();
+            Promise.all([
+                this.props.fetchArtists(this.props.token, 0),
+                this.props.fetchArtists(this.props.token, 1),
+                this.props.fetchArtists(this.props.token, 2),
+                this.props.fetchSongs(this.props.token, 0),
+                this.props.fetchSongs(this.props.token, 1),
+                this.props.fetchSongs(this.props.token, 2)
+            ]).then(() => {
+                this.props.fetchArtistsComplete();
+                this.props.fetchSOngsComplete();
+            })
         }
+
     }
 
     render() {
@@ -73,14 +99,16 @@ const mapStateToProps = state => {
     return {
         tokenSuccess: state.token.fetchTokenSuccess, 
         token: state.token.token,
-        artistsTimeRange: state.artists.timeRange,
-        songsTimeRange: state.songs.timeRange
     }
 };
 
 const mapDispatchToProps = dispatch => ({
+    fetchArtistsPending: () => dispatch(fetchArtistsPending()),
+    fetchSongsPending: () => dispatch(fetchSongsPending()),
     fetchArtists: (token, range) => dispatch(fetchArtists(token, range)),
-    fetchSongs: (token, range) => dispatch(fetchSongs(token, range))
+    fetchSongs: (token, range) => dispatch(fetchSongs(token, range)),
+    fetchArtistsComplete: () => dispatch(fetchArtistsComplete()),
+    fetchSongsComplete: () => dispatch(fetchSongsComplete())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Header));
