@@ -36,11 +36,15 @@ class Artists extends React.Component {
             currentArtistItems = this.props.mediumTermArtists
         } else {
             currentArtistItems = this.props.longTermArtists
-        }   
+        } 
+
+        currentArtistItems = currentArtistItems.slice(0, 20);
+
+        console.log(currentArtistItems);
 
 
         const artistItems = currentArtistItems.map((artist, index) => (
-            <ArtistListItem text={artist.name} key={index} image={artist.images[0].url}></ArtistListItem>
+            <ArtistListItem primaryText={artist.name} secondaryText={artist.genres.join(", ")} key={index} image={artist.images[0].url}></ArtistListItem>
         )); 
 
 

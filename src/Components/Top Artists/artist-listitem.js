@@ -14,9 +14,9 @@ export default class ArtistListItem extends React.Component {
 
         return (
             <ListItem key={this.props.key} >
-                <Avatar src={this.props.image} style={{ borderRadius: 0 }}>
+                <Avatar src={this.props.image} style={{ borderRadius: 0, height: '100px', width: '100px', maxWidth: '100%', maxHeight: '100%' }}>
                 </Avatar>
-                <ListItemText primary={this.props.text} style={{fontFamily: 'Exo 2'}}/>
+                <ListItemText primary={this.props.primaryText} secondary={this.props.secondaryText} style={{fontFamily: 'Exo 2'}}/>
             </ListItem>
         )
     }

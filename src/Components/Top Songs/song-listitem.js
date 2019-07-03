@@ -14,9 +14,9 @@ export default class SongListItem extends React.Component {
 
         return (
             <ListItem key={this.props.key} style={{ width: '100%' }} >
-                <Avatar src={this.props.image} style={{ borderRadius: 0 }}>
+                <Avatar src={this.props.image} style={{ borderRadius: 0, height: '100px', width: '100px', maxWidth: '100%', maxHeight: '100%'}}>
                 </Avatar>
-                <ListItemText primary={this.props.text} />
+                <ListItemText primary={this.props.primaryText} secondary={this.props.secondaryText} />
             </ListItem>
         )
     }

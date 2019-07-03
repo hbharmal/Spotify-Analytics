@@ -37,9 +37,11 @@ class Songs extends React.Component {
         } else {
             currentSongItems = this.props.longTermSongs
         }
+    
+        currentSongItems = currentSongItems.slice(0, 20);
 
         const songItems = currentSongItems.map((song, index) => (
-            <SongListItem text={song.name} key={index} image={song.album.images[0].url}></SongListItem>
+            <SongListItem primaryText={song.name} secondaryText={song.artists.map(artist => artist.name).join(", ")} key={index} image={song.album.images[0].url}></SongListItem>
         ));
 
         const { classes } = this.props;

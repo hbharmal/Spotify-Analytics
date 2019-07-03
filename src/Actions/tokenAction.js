@@ -3,7 +3,7 @@ export const fetchToken = () => {
     var url = new URL('https://accounts.spotify.com/authorize');
     url.searchParams.append('client_id', '62974f3b55f14401b41569f813c07565');
     url.searchParams.append('client_secret', '6a03defc780c46eaaeef5f6c4b831e8d');
-    url.searchParams.append('scope', 'user-top-read');
+    url.searchParams.append('scope', 'user-top-read user-read-private user-read-email user-read-birthdate');
     url.searchParams.append('response_type', 'token');
     url.searchParams.append('redirect_uri', 'http://localhost:8080');
 
