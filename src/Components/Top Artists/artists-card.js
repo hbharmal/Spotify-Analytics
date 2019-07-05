@@ -7,6 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 
 import RangeButton from './range-buttons-artist';
+import { Button } from '@material-ui/core';
+
+import { filterGenres } from '../../utils';
 
 const styles = theme => ({
     list: {
@@ -24,27 +27,67 @@ class Artists extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            endIndex: 20,
+            close: false,
+            currentArtistItems: [] 
+        }
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+
+        if (this.props.fetchArtistsSuccess) {
+
+            let currentArtistItems = []
+            if (this.props.timeRange == 0) {
+                currentArtistItems = this.props.shortTermArtists
+            } else if (this.props.timeRange == 1) {
+                currentArtistItems = this.props.mediumTermArtists
+            } else {
+                currentArtistItems = this.props.longTermArtists
+            } 
+    
+            // if the fetch is complete 
+            if (!prevProps.fetchArtistsSuccess) {
+                this.setState({
+                    currentArtistItems: currentArtistItems
+                });
+            }  
+    
+            // if the time range has changed 
+            if (prevProps.timeRange != this.props.timeRange) {
+                this.setState({
+                    currentArtistItems: currentArtistItems,
+                    endIndex: 20, 
+                    close: false  
+                });
+            }
+            
+        }
+    }
+
+    handleClick() {
+
+        if (this.state.endIndex + 10 >= this.state.currentArtistItems.length) {
+            this.setState({
+                endIndex: this.state.currentArtistItems.length,
+                close: true 
+            });
+        } else {
+            this.setState({
+                endIndex: this.state.endIndex + 10
+            });
+        }
+
     }
 
     render() {
 
-        let currentArtistItems = []
+        let slicedItems = this.state.currentArtistItems.slice(0, this.state.endIndex);
 
-        if (this.props.timeRange == 0) {
-            currentArtistItems = this.props.shortTermArtists
-        } else if (this.props.timeRange == 1) {
-            currentArtistItems = this.props.mediumTermArtists
-        } else {
-            currentArtistItems = this.props.longTermArtists
-        } 
-
-        currentArtistItems = currentArtistItems.slice(0, 20);
-
-        console.log(currentArtistItems);
-
-
-        const artistItems = currentArtistItems.map((artist, index) => (
-            <ArtistListItem primaryText={artist.name} secondaryText={artist.genres.join(", ")} key={index} image={artist.images[0].url}></ArtistListItem>
+        const artistItems = slicedItems.map((artist, index) => (
+            <ArtistListItem primaryText={artist.name} secondaryText={filterGenres(artist.genres).join(", ")} key={index} image={artist.images[0].url}></ArtistListItem>
         )); 
 
 
@@ -57,6 +100,11 @@ class Artists extends React.Component {
                 <List className={classes.root} style={{ width: '100%' }}>
                     {artistItems}
                 </List>
+                {this.props.fetchArtistsSuccess && !this.state.close && 
+                    <Button variant="contained" style={{ justifyContent: 'center', textAlign: 'center', width:'100%', borderRadius: '0px 0px 4px 4px'}} onClick={this.handleClick}>
+                        Show More
+                    </Button>
+                }
             </Paper>
         )
     }

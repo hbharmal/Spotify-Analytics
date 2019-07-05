@@ -29,8 +29,6 @@ class BarChartCard extends React.Component {
 
         const { classes } = this.props;
 
-        console.log(classes);
-
         return (
             <Paper className={classes.root}>
                 <CardHeader title="Music Analysis" className={classes.header} />
