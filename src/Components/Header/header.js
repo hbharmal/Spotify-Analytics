@@ -57,6 +57,7 @@ class Header extends React.Component {
     }
 
     componentDidUpdate() {
+        
         if (this.props.tokenSuccess && !this.props.apicomplete) {
             this.props.fetchArtistsPending();
             this.props.fetchSongsPending();

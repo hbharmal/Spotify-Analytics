@@ -1,7 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 import { withStyles } from '@material-ui/core/styles';
+
+import { fetchSongFeaturesPending, fetchSongFeaturesComplete, fetchSongFeatures } from '../../Actions/songFeaturesAction';
 
 const styles = theme => ({
     root: {
@@ -25,6 +28,15 @@ class BarChartCard extends React.Component {
         super(props);
     }
 
+    componentDidUpdate() {
+
+        if (this.props.fetchSongsSuccess) {
+            const ids = this.props.songs.map(song => song.id);
+            this.props.fetchSongFeatures(this.props.token, ids);
+        }
+
+    }
+
     render() {
 
         const { classes } = this.props;
@@ -39,4 +51,18 @@ class BarChartCard extends React.Component {
     
 }
 
-export default withStyles(styles)(BarChartCard);
+const mapStateToProps = state => {
+    return {
+        token: state.token.token,
+        fetchSongsSuccess: state.songs.fetchSongsSuccess,
+        songs: state.songs.shortTermSongList
+    };
+};
+
+const mapDispatchToProps = dispatch => ({
+    fetchSongFeaturesPending: () => dispatch(fetchSongFeaturesPending()),
+    fetchSongFeatures: (token, ids) => dispatch(fetchSongFeatures(token, ids)),
+    fetchSongFeaturesComplete: () => dispatch(fetchSongFeaturesComplete())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(BarChartCard));

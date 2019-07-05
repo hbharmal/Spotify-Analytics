@@ -78,8 +78,6 @@ export function filterGenres(genres) {
         }
     });
 
-    console.log(finalGenres);
-
     return finalGenres;
 
 }

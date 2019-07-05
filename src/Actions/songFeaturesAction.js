@@ -37,6 +37,7 @@ export const fetchSongFeatures = (accessToken, ids) => {
         fetch(request).then(res => {
             return res.json();
         }).then(data => {
+            console.log(data);
             dispatch(fetchSongFeaturesSuccess(data.audio_features));
         }).catch(err => {
             dispatch(fetchSongFeaturesError(err));
