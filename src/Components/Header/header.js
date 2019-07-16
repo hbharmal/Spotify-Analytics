@@ -114,7 +114,7 @@ const mapStateToProps = state => {
         tokenSuccess: state.token.fetchTokenSuccess, 
         token: state.token.token,
         userinfo: state.user.information,
-        apicomplete: state.artists.fetchArtistsSuccess
+        apicomplete: state.artists.fetchArtistsComplete
     };
 };
 

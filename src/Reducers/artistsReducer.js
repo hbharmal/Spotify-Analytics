@@ -3,10 +3,12 @@ const initialState = {
     shortTermArtistList: [],
     mediumTermArtistList: [],
     longTermArtistList: [],
-    artistsIds: [],
+    artistIds: [],
+    artistGenres: [],
     relatedArtistIds: [], 
     fetchArtistsSuccess: false,
-    fetchArtistsPending: false 
+    fetchArtistsPending: false,
+    fetchArtistsComplete: false 
 }
   
 export const artistsReducer = (state = initialState, action) => {
@@ -22,7 +24,8 @@ export const artistsReducer = (state = initialState, action) => {
         case "FETCH_ARTISTS_COMPLETE":
             return {
                 ...state,
-                fetchArtistsPending: false 
+                fetchArtistsPending: false,
+                fetchArtistsComplete: true 
             }
         
         case "FETCH_SHORT_TERM_ARTISTS_SUCCESS":
@@ -33,24 +36,25 @@ export const artistsReducer = (state = initialState, action) => {
             };
 
         case "FETCH_MEDIUM_TERM_ARTISTS_SUCCESS":
-                return {
-                    ...state,
-                    mediumTermArtistList: action.artists,
-                    fetchArtistsSuccess: true,
-                };
+            return {
+                ...state,
+                mediumTermArtistList: action.artists,
+                fetchArtistsSuccess: true,
+            };
 
         case "FETCH_LONG_TERM_ARTISTS_SUCCESS":
-                return {
-                    ...state,
-                    longTermArtistList: action.artists,
-                    fetchArtistsSuccess: true,
-                };
+            return {
+                ...state,
+                longTermArtistList: action.artists,
+                fetchArtistsSuccess: true,
+            };
     
         case "FETCH_ARTISTS_ERROR":
             return {
                 ...state,
                 fetchArtistsSuccess: false,
-                fetchArtistsPending: false
+                fetchArtistsPending: false,
+                fetchArtistsComplete: false 
             };
         
         case "ADD_ARTIST_IDS":
@@ -58,6 +62,12 @@ export const artistsReducer = (state = initialState, action) => {
                 ...state,
                 artistIds: action.ids 
             };
+        
+        case "ADD_ARTIST_GENRES":
+            return {
+                ...state,
+                artistGenres: action.genres 
+            }
         
         case "CHANGE_TIME_RANGE_ARTISTS":
             return {

@@ -74,3 +74,12 @@ export const changeTimeRangeSongs = (range) => {
     }
 }
 
+// add Song IDS to redux store for future processing 
+export const addSongIds = (ids) => {
+    var uniqueIds = [...new Set(ids)];
+    return {
+        type: 'ADD_SONG_IDS',
+        ids: uniqueIds 
+    }
+}
+

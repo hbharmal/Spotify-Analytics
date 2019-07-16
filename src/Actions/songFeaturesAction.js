@@ -1,3 +1,10 @@
+export const changeAnalysisMode = (mode) => {
+    return {
+        type: 'CHANGE_ANALYSIS_MODE',
+        mode: mode 
+    };
+};
+
 export const fetchSongFeaturesPending = () => {
     return {
         type: 'FETCH_SONG_FEATURES_PENDING'
@@ -37,14 +44,11 @@ export const fetchSongFeatures = (accessToken, ids) => {
         fetch(request).then(res => {
             return res.json();
         }).then(data => {
-            console.log(data);
             dispatch(fetchSongFeaturesSuccess(data.audio_features));
         }).catch(err => {
             dispatch(fetchSongFeaturesError(err));
         });
 
     }
-
-
 
 }

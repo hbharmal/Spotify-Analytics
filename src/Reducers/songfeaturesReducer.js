@@ -1,12 +1,19 @@
 const initialState = {
+    mode: 0,
     songFeatures: [],
     fetchSongFeaturesSuccess: false,
-    fetchSongFeaturesPending: false 
+    fetchSongFeaturesPending: false
 }
 
 export const songfeaturesReducer = (state = initialState, action) => {
 
     switch (action.type) {
+        
+        case 'CHANGE_ANALYSIS_MODE':
+            return {
+                ...state,
+                mode: action.mode 
+            }
 
         case 'FETCH_SONG_FEATURES_PENDING':
             return {

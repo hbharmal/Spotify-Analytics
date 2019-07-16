@@ -5,11 +5,12 @@ import  { withStyles } from '@material-ui/core/styles';
 import  List from '@material-ui/core/List';
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
-
 import RangeButton from './range-buttons-artist';
 import { Button } from '@material-ui/core';
 
 import { filterGenres } from '../../utils';
+
+import { addArtistGenres } from '../../Actions/artistsAction';
 
 const styles = theme => ({
     list: {
@@ -30,48 +31,51 @@ class Artists extends React.Component {
         this.state = {
             endIndex: 20,
             close: false,
-            currentArtistItems: [] 
+            addedGenres: false 
         }
         this.handleClick = this.handleClick.bind(this);
     }
 
     componentDidUpdate(prevProps, prevState) {
 
-        if (this.props.fetchArtistsSuccess) {
-
-            let currentArtistItems = []
-            if (this.props.timeRange == 0) {
-                currentArtistItems = this.props.shortTermArtists
-            } else if (this.props.timeRange == 1) {
-                currentArtistItems = this.props.mediumTermArtists
-            } else {
-                currentArtistItems = this.props.longTermArtists
-            } 
-    
-            // if the fetch is complete 
-            if (!prevProps.fetchArtistsSuccess) {
-                this.setState({
-                    currentArtistItems: currentArtistItems
-                });
-            }  
+        if (this.props.fetchArtistsComplete) {
     
             // if the time range has changed 
             if (prevProps.timeRange != this.props.timeRange) {
                 this.setState({
-                    currentArtistItems: currentArtistItems,
                     endIndex: 20, 
                     close: false  
                 });
-            }
-            
+            } 
         }
+
+        const complete = this.props.fetchArtistsComplete && !this.state.addedGenres && this.props.shortTermArtists.length > 0 && this.props.mediumTermArtists.length > 0 && this.props.longTermArtists.length > 0;
+
+        if (complete) {
+            const allArtists = [...this.props.shortTermArtists, ...this.props.mediumTermArtists, ...this.props.longTermArtists];
+            this.props.addGenres(allArtists);
+            this.setState({
+                addedGenres: true
+            });
+        } 
+
     }
 
     handleClick() {
 
-        if (this.state.endIndex + 10 >= this.state.currentArtistItems.length) {
+        let currentArtistItems = []
+
+        if (this.props.timeRange == 0) {
+            currentArtistItems = this.props.shortTermArtists
+        } else if (this.props.timeRange == 1) {
+            currentArtistItems = this.props.mediumTermArtists
+        } else {
+            currentArtistItems = this.props.longTermArtists
+        }
+
+        if (this.state.endIndex + 10 >= currentArtistItems.length) {
             this.setState({
-                endIndex: this.state.currentArtistItems.length,
+                endIndex: currentArtistItems.length,
                 close: true 
             });
         } else {
@@ -84,7 +88,17 @@ class Artists extends React.Component {
 
     render() {
 
-        let slicedItems = this.state.currentArtistItems.slice(0, this.state.endIndex);
+        let currentArtistItems = []
+
+        if (this.props.timeRange == 0) {
+            currentArtistItems = this.props.shortTermArtists
+        } else if (this.props.timeRange == 1) {
+            currentArtistItems = this.props.mediumTermArtists
+        } else {
+            currentArtistItems = this.props.longTermArtists
+        }
+
+        let slicedItems = currentArtistItems.slice(0, this.state.endIndex);
 
         const artistItems = slicedItems.map((artist, index) => (
             <ArtistListItem primaryText={artist.name} secondaryText={filterGenres(artist.genres).join(", ")} key={index} image={artist.images[0].url}></ArtistListItem>
@@ -100,7 +114,7 @@ class Artists extends React.Component {
                 <List className={classes.root} style={{ width: '100%' }}>
                     {artistItems}
                 </List>
-                {this.props.fetchArtistsSuccess && !this.state.close && 
+                {this.props.fetchArtistsComplete && !this.state.close && 
                     <Button variant="contained" style={{ justifyContent: 'center', textAlign: 'center', width:'100%', borderRadius: '0px 0px 4px 4px'}} onClick={this.handleClick}>
                         Show More
                     </Button>
@@ -116,8 +130,12 @@ const mapStateToProps = (state) => {
         mediumTermArtists: state.artists.mediumTermArtistList,
         longTermArtists: state.artists.longTermArtistList,
         timeRange: state.artists.timeRange,
-        fetchArtistsSuccess: state.artists.fetchArtistsSuccess
+        fetchArtistsComplete: state.artists.fetchArtistsComplete
     }
 };
 
-export default connect(mapStateToProps, null)(withStyles(styles)(Artists));
+const mapDispatchToProps = (dispatch) => ({
+    addGenres: (artists) => dispatch(addArtistGenres(artists))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Artists));

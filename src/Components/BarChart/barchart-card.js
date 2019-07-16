@@ -4,6 +4,8 @@ import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 import { withStyles } from '@material-ui/core/styles';
 
+import AnalysisButton from './analysis-button';
+
 import { fetchSongFeaturesPending, fetchSongFeaturesComplete, fetchSongFeatures } from '../../Actions/songFeaturesAction';
 
 const styles = theme => ({
@@ -35,6 +37,10 @@ class BarChartCard extends React.Component {
             this.props.fetchSongFeatures(this.props.token, ids);
         }
 
+        if (this.props.fetchSongFeaturesComplete) {
+            console.log(this.props.fetchSongFeatures);
+        }
+
     }
 
     render() {
@@ -44,6 +50,7 @@ class BarChartCard extends React.Component {
         return (
             <Paper className={classes.root}>
                 <CardHeader title="Music Analysis" className={classes.header} />
+                <AnalysisButton />
             </Paper>
         )
 
