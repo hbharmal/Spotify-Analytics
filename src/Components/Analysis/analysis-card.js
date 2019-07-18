@@ -24,7 +24,7 @@ const styles = theme => ({
     }
 });
 
-class BarChartCard extends React.Component {
+class AnalysisCard extends React.Component {
 
     constructor(props) {
         super(props);
@@ -32,14 +32,15 @@ class BarChartCard extends React.Component {
 
     componentDidUpdate() {
 
-        if (this.props.fetchSongsSuccess) {
+        if (this.props.fetchSongsComplete && !this.props.fetchSongFeaturesComplete) {
             const ids = this.props.songs.map(song => song.id);
-            this.props.fetchSongFeatures(this.props.token, ids);
-        }
-
-        if (this.props.fetchSongFeaturesComplete) {
-            console.log(this.props.fetchSongFeatures);
-        }
+            Promise.all([
+                this.props.fetchSongFeatures(this.props.token, ids),
+            ]).then(() => {
+                this.props.fetchSongFeaturesComplete;
+            });
+            
+        }  
 
     }
 
@@ -61,8 +62,10 @@ class BarChartCard extends React.Component {
 const mapStateToProps = state => {
     return {
         token: state.token.token,
-        fetchSongsSuccess: state.songs.fetchSongsSuccess,
-        songs: state.songs.shortTermSongList
+        fetchSongsComplete: state.songs.fetchSongsComplete,
+        fetchSongFeaturesComplete: state.songFeatures.fetchSongFeaturesComplete,
+        songs: state.songs.shortTermSongList,
+        songFeatures: state.songFeatures.songFeatures
     };
 };
 
@@ -72,4 +75,4 @@ const mapDispatchToProps = dispatch => ({
     fetchSongFeaturesComplete: () => dispatch(fetchSongFeaturesComplete())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(BarChartCard));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AnalysisCard));

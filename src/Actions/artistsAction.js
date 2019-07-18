@@ -86,18 +86,18 @@ export const addArtistIds = (ids) => {
 
 // Add the genres to the redux store (needed for chart)
 export const addArtistGenres = (artists) => {
-    console.log(artists.map(artist => artist.name));
-    let a = []
+    // console.log(artists.map(artist => artist.name));
+    // let a = []
     const uniqueGenres = Array.from(new Set(artists.map(artist => artist.id)))
         .map(id => {
             return artists.find(artist => artist.id === id)
         }).map(artist => {
-            a.push(artist);
+            // a.push(artist);
             return artist.genres
         }).map(genre => {
             return filterGenres(genre);
         });
-    console.log(a.map(artist => artist.name))
+    // console.log(a.map(artist => artist.name))
     return {
         type: 'ADD_ARTIST_GENRES',
         genres: uniqueGenres

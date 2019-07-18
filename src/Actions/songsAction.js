@@ -1,5 +1,7 @@
 import { rangeToString } from '../utils';
 
+import { fetchSongFeatures } from './songFeaturesAction';
+
 export const fetchSongsPending = () => {
     return {
         type: 'FETCH_SONGS_PENDING'
@@ -77,6 +79,8 @@ export const changeTimeRangeSongs = (range) => {
 // add Song IDS to redux store for future processing 
 export const addSongIds = (ids) => {
     var uniqueIds = [...new Set(ids)];
+    console.log(ids);
+    console.log(uniqueIds)
     return {
         type: 'ADD_SONG_IDS',
         ids: uniqueIds 

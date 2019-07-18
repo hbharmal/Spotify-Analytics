@@ -2,7 +2,8 @@ const initialState = {
     mode: 0,
     songFeatures: [],
     fetchSongFeaturesSuccess: false,
-    fetchSongFeaturesPending: false
+    fetchSongFeaturesPending: false,
+    fetchSongFeaturesComplete: false 
 }
 
 export const songfeaturesReducer = (state = initialState, action) => {
@@ -24,7 +25,8 @@ export const songfeaturesReducer = (state = initialState, action) => {
         case 'FETCH_SONG_FEATURES_COMPLETE':
             return {
                 ...state, 
-                fetchSongFeaturesPending: false 
+                fetchSongFeaturesPending: false,
+                fetchSongFeaturesComplete: true 
             }
         
         case 'FETCH_SONG_FEATURES_SUCCESS':
@@ -38,7 +40,8 @@ export const songfeaturesReducer = (state = initialState, action) => {
             return {
                 ...state,
                 fetchSongFeaturesPending: false,
-                fetchSongFeaturesSuccess: false 
+                fetchSongFeaturesSuccess: false,
+                fetchSongFeaturesComplete: false
             }
         
         default:
