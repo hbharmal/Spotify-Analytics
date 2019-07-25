@@ -94,9 +94,10 @@ export const addArtistGenres = (artists) => {
         }).map(artist => {
             // a.push(artist);
             return artist.genres
-        }).map(genre => {
-            return filterGenres(genre);
         });
+        // }).map(genre => {
+        //     return filterGenres(genre);
+        // });
     // console.log(a.map(artist => artist.name))
     return {
         type: 'ADD_ARTIST_GENRES',

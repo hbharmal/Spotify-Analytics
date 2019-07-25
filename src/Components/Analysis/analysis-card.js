@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 
 import AnalysisButton from './analysis-button';
+import Genres from './genres';
 
 import { fetchSongFeaturesPending, fetchSongFeaturesComplete, fetchSongFeatures } from '../../Actions/songFeaturesAction';
 
@@ -52,6 +54,7 @@ class AnalysisCard extends React.Component {
             <Paper className={classes.root}>
                 <CardHeader title="Music Analysis" className={classes.header} />
                 <AnalysisButton />
+                <Genres />
             </Paper>
         )
 
