@@ -14,7 +14,7 @@ const styles = theme => ({
     root: {
         overflow: 'auto',
         width: '100%',
-        maxHeight: 600,
+        maxHeight: 1000,
         margin: '10px 0px 0px 0px'
     },
     header: {

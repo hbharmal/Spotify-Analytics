@@ -111,7 +111,7 @@ class Artists extends React.Component {
             <Paper className={classes.list}>
                 <CardHeader title="Top Artists" style={{textAlign: 'center', backgroundColor: 'grey', position: 'sticky', top: 0, zIndex: 2}}/>
                 <RangeButton />
-                <List className={classes.root} style={{ width: '100%' }}>
+                <List className={classes.root}>
                     {artistItems}
                 </List>
                 {this.props.fetchArtistsComplete && !this.state.close && 

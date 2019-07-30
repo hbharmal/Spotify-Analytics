@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 
 import GenreChart from './genre-chart';
+import GenreList from './genres-list';
 
 import { computeGenrePercentages } from '../../utils';
 
@@ -22,8 +23,10 @@ export class Genres extends React.Component {
         super(props);
         this.state = {
             computedPercentages: false,
-            genrePercentages: {}
-        }
+            genrePercentages: [],
+            genreItems: [],
+            colors: []
+        };
     }
 
     componentDidUpdate() {
@@ -46,9 +49,25 @@ export class Genres extends React.Component {
                 filteredDictArray = dictArray;
             }
 
+            const blue = "#4FC2D7";
+            const green = "#54C88F";
+            const lightBrown = "#D5AD79";
+            const pink = "#E49CDA";
+            const lightGreen = "#7CC29C";
+            const white = "#9CBAA8";
+
+            const colors = [blue, green, lightBrown, pink, lightGreen, white];
+
+            const genreItemsDictArray = filteredDictArray.map((object, index) => {
+                return {genreName: object.genre, color: colors[index]}
+            });
+            
+
             this.setState({
                 genrePercentages: filteredDictArray,
-                computedPercentages: true 
+                computedPercentages: true,
+                genreItems: genreItemsDictArray,
+                colors: colors 
             });
         }
     }
@@ -60,16 +79,14 @@ export class Genres extends React.Component {
         return (
             <div className={classes.root}>
                 <Grid container justify="center">
-                    <Grid item xs={12} sm={9} style={{padding: '10px 5px 10px 10px'}}>
+                    <Grid item xs={12} sm={8} style={{padding: '10px 5px 10px 10px'}}>
                         
-                        {this.state.computedPercentages && <GenreChart genres={this.state.genrePercentages}/>}
+                        {this.state.computedPercentages && <GenreChart genres={this.state.genrePercentages} colors={this.state.colors}/>}
                     
                     </Grid>
-                    <Grid item xs={12} sm={3} style={{padding: '10px 10px 10px 5px'}}>
+                    <Grid item xs={12} sm={4} style={{padding: '10px 10px 10px 5px'}}>
 
-                        <Paper>
-                            Hello World
-                        </Paper>
+                        {this.state.computedPercentages && <GenreList genres={this.state.genreItems}/>}
 
                     </Grid>
 
