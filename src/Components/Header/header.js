@@ -7,9 +7,11 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 
 import { fetchArtists, fetchArtistsPending, fetchArtistsComplete } from '../../Actions/artistsAction';
-import { fetchSongs, fetchSongsPending, fetchSongsComplete } from '../../Actions/songsAction';
+import { fetchSongs, fetchSongsPending, fetchSongsComplete, addSongIds } from '../../Actions/songsAction';
+import { fetchUserinfo, fetchUserinfoPending, fetchUserinfoComplete } from '../../Actions/userinfoAction';
 
 import LoginButton from './login-button'
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
     title: {
@@ -28,7 +30,8 @@ class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: 'Spotilytics Application'
+            title: 'Spotilytics Application',
+            addedSongIds: false 
         }
     }
 
@@ -37,6 +40,7 @@ class Header extends React.Component {
         if (this.props.tokenSuccess) {
             this.props.fetchArtistsPending();
             this.props.fetchSongsPending();
+            this.props.fetchArtistsPending();
             Promise.all([
                 this.props.fetchArtists(this.props.token, 0),
                 this.props.fetchArtists(this.props.token, 1),
@@ -47,26 +51,43 @@ class Header extends React.Component {
             ]).then(() => {
                 this.props.fetchArtistsComplete();
                 this.props.fetchSongsComplete();
+                this.props.fetchUserinfoComplete();
             })
         }
 
     }
 
     componentDidUpdate() {
-
-        if (this.props.tokenSuccess) {
+        
+        if (this.props.tokenSuccess && !this.props.apicomplete) {
             this.props.fetchArtistsPending();
             this.props.fetchSongsPending();
+            this.props.fetchArtistsPending();
             Promise.all([
                 this.props.fetchArtists(this.props.token, 0),
                 this.props.fetchArtists(this.props.token, 1),
                 this.props.fetchArtists(this.props.token, 2),
                 this.props.fetchSongs(this.props.token, 0),
                 this.props.fetchSongs(this.props.token, 1),
-                this.props.fetchSongs(this.props.token, 2)
+                this.props.fetchSongs(this.props.token, 2),
+                this.props.fetchUserinfo(this.props.token)
             ]).then(() => {
                 this.props.fetchArtistsComplete();
-                this.props.fetchSOngsComplete();
+                this.props.fetchSongsComplete();
+                this.props.fetchUserinfoComplete();
+            })
+        }
+
+        const conditions = this.props.shortTermSongs.length > 0 
+            && this.props.mediumTermSongs.length > 0 
+            && this.props.longTermSongs.length > 0         
+
+        if (this.props.apicomplete && !this.state.addedSongIds && conditions) {
+            const allSongs = [...this.props.shortTermSongs, ...this.props.mediumTermSongs, ...this.props.longTermSongs];
+            const allIds = allSongs.map(song => song.id);
+            this.props.addSongIds(allIds);
+            this.setState({
+                addedSongIds: true
             })
         }
 
@@ -86,9 +107,16 @@ class Header extends React.Component {
                         title={this.state.title}
                     />
                 </CardContent>
-                <CardActions style={{justifyContent: 'center', padding: '0 0 0 0'}}>
-                    <LoginButton />
-                </CardActions>
+                {!this.props.tokenSuccess && 
+                    <CardActions style={{justifyContent: 'center', padding: '0 0 0 0'}}>
+                        <LoginButton />
+                    </CardActions>
+                }
+                {this.props.apicomplete && 
+                    <Typography style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', fontSize: 25, padding: '0px 0px 10px 0px'}}>
+                      Welcome {this.props.userinfo.display_name}!
+                    </Typography>
+                }
             </Card>
         ) 
     }
@@ -99,7 +127,12 @@ const mapStateToProps = state => {
     return {
         tokenSuccess: state.token.fetchTokenSuccess, 
         token: state.token.token,
-    }
+        userinfo: state.user.information,
+        apicomplete: state.artists.fetchArtistsComplete,
+        shortTermSongs: state.songs.shortTermSongList,
+        mediumTermSongs: state.songs.mediumTermSongList,
+        longTermSongs: state.songs.longTermSongList
+    };
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -108,7 +141,11 @@ const mapDispatchToProps = dispatch => ({
     fetchArtists: (token, range) => dispatch(fetchArtists(token, range)),
     fetchSongs: (token, range) => dispatch(fetchSongs(token, range)),
     fetchArtistsComplete: () => dispatch(fetchArtistsComplete()),
-    fetchSongsComplete: () => dispatch(fetchSongsComplete())
+    fetchSongsComplete: () => dispatch(fetchSongsComplete()),
+    fetchUserinfoPending: () => dispatch(fetchUserinfoPending()),
+    fetchUserinfo: (token) => dispatch(fetchUserinfo(token)),
+    fetchUserinfoComplete: () => dispatch(fetchUserinfoComplete()),
+    addSongIds: (ids) => dispatch(addSongIds(ids))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Header));

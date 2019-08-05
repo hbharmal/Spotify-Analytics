@@ -3,8 +3,10 @@ const initialState = {
     shortTermSongList: [],
     mediumTermSongList: [],
     longTermSongList: [],
+    songIds: [],
     fetchSongsSuccess: false,
-    fetchSongsPending: false 
+    fetchSongsPending: false,
+    fetchSongsComplete: false 
 };
   
 export const songsReducer = (state = initialState, action) => {
@@ -20,7 +22,8 @@ export const songsReducer = (state = initialState, action) => {
         case "FETCH_SONGS_COMPLETE":
             return {
                 ...state, 
-                fetchSongsPending: false 
+                fetchSongsPending: false,
+                fetchSongsComplete: true 
             }
     
         case "FETCH_SHORT_TERM_SONGS_SUCCESS":
@@ -43,6 +46,12 @@ export const songsReducer = (state = initialState, action) => {
                 longTermSongList: action.songs,
                 fetchSongsSuccess: true,
             };
+        
+        case "ADD_SONG_IDS":
+            return {
+                ...state, 
+                songIds: action.ids 
+            }
 
         case 'FETCH_SONGS_ERROR':
             return {
