@@ -1,7 +1,5 @@
 import { rangeToString } from '../utils';
 
-import { fetchSongFeatures } from './songFeaturesAction';
-
 export const fetchSongsPending = () => {
     return {
         type: 'FETCH_SONGS_PENDING'
@@ -84,4 +82,27 @@ export const addSongIds = (ids) => {
         ids: uniqueIds 
     }
 }
+
+// export const getTopSongsGenres = (albumIds, accessToken) => {
+
+//     console.log("entered")
+    
+//     console.log(albumIds);
+
+//         const request = new Request(`https://api.spotify.com/v1/albums/?ids=${albumIds}`, {
+//             headers: new Headers({
+//                 'Authorization': 'Bearer ' + accessToken
+//             })
+//         });
+
+//         return dispatch => {
+//             fetch(request).then(res => {
+//                 res.json();
+//             }).then(items => {
+//                 console.log(items);
+//             });
+//         }
+
+// }
+
 

@@ -104,3 +104,18 @@ export const addArtistGenres = (artists) => {
         genres: uniqueGenres
     }
 }
+
+export const addTopArtistGenres = (artists) => {
+
+    const genres = artists.map(artist => {
+        return {  
+            artist: artist.name, 
+            genres: filterGenres(artist.genres)
+        }
+    });
+
+    return {
+        type: "ADD_TOP_ARTIST_GENRES",
+        genres: genres
+    }
+}

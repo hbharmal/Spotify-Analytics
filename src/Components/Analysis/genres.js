@@ -11,6 +11,8 @@ import GenreList from './genres-list';
 
 import { computeGenrePercentages } from '../../utils';
 
+import { setTopGenres, setTopArtists } from '../../Actions/genreAnalysisAction';
+
 const styles = theme => ({
     root: {
         flexGrow: 1
@@ -33,11 +35,13 @@ export class Genres extends React.Component {
         if (!this.state.computedPercentages && this.props.uniqueGenres.length > 0) {
             const dictArray = computeGenrePercentages(this.props.uniqueGenres);
             let filteredDictArray = [];
+            let others = [];
             if (dictArray.length > 6) {
                 let otherCount = 0;
                 const difference = dictArray.length - 6;
                 for (let i = 0; i < difference; i++) {
                     otherCount += dictArray[i].count;
+                    others.push(dictArray[i]);
                 }
                 filteredDictArray = dictArray.slice(difference, dictArray.length);
                 filteredDictArray.map(object => {
@@ -49,9 +53,14 @@ export class Genres extends React.Component {
                 filteredDictArray = dictArray;
             }
 
+            let totalCount = 0;
+            filteredDictArray.map(object => {
+                totalCount += object.count;
+            });
+
             const blue = "#4FC2D7";
             const green = "#54C88F";
-            const lightBrown = "#D5AD79";
+            const lightBrown = "#FFF8DC";
             const pink = "#E49CDA";
             const lightGreen = "#7CC29C";
             const white = "#9CBAA8";
@@ -59,10 +68,16 @@ export class Genres extends React.Component {
             const colors = [blue, green, lightBrown, pink, lightGreen, white];
 
             const genreItemsDictArray = filteredDictArray.map((object, index) => {
-                return {genreName: object.genre, color: colors[index]}
+                if (object.genre === "other") {
+                    return {genreName: object.genre, color: colors[index], percentage: Math.round(object.count / totalCount * 100), count: object.count, genres: others}
+                } else {
+                    return {genreName: object.genre, color: colors[index], percentage: Math.round(object.count / totalCount * 100), count: object.count, genres: null}
+                }
             });
-            
 
+            this.props.setTopGenres(genreItemsDictArray);
+            this.props.setTopArtists(genreItemsDictArray, this.props.topArtistGenres);
+            
             this.setState({
                 genrePercentages: filteredDictArray,
                 computedPercentages: true,
@@ -70,6 +85,7 @@ export class Genres extends React.Component {
                 colors: colors 
             });
         }
+
     }
 
     render() {
@@ -100,7 +116,13 @@ export class Genres extends React.Component {
 const mapStateToProps = state => {
     return {
         uniqueGenres: state.artists.artistGenres,
+        topArtistGenres: state.artists.topArtistGenres
     };
 };
 
-export default connect(mapStateToProps, null)(withStyles(styles)(Genres));
+const mapDispatchToProps = dispatch => ({
+    setTopGenres: (genres) => dispatch(setTopGenres(genres)),
+    setTopArtists: (genres, artists) => dispatch(setTopArtists(genres, artists))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Genres));

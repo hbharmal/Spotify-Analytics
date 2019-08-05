@@ -3,7 +3,9 @@ const initialState = {
     songFeatures: [],
     fetchSongFeaturesSuccess: false,
     fetchSongFeaturesPending: false,
-    fetchSongFeaturesComplete: false 
+    fetchSongFeaturesComplete: false, 
+    hoveredIndex: null
+    
 }
 
 export const songfeaturesReducer = (state = initialState, action) => {
@@ -43,6 +45,13 @@ export const songfeaturesReducer = (state = initialState, action) => {
                 fetchSongFeaturesSuccess: false,
                 fetchSongFeaturesComplete: false
             }
+        
+        case 'SET_HOVERED_INDEX':
+            return {
+                ...state, 
+                hoveredIndex: action.index 
+            }
+            
         
         default:
             return {

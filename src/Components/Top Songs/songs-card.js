@@ -7,6 +7,8 @@ import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 
+import { getTopSongsGenres } from '../../Actions/songsAction';
+
 import RangeButton from './range-button-songs';
 
 const styles = theme => ({
@@ -43,8 +45,17 @@ class Songs extends React.Component {
                 });
             }
 
+            const conditions = this.props.longTermSongs.length > 0;
+
+            // TODO: add full album information to redux store if needed
+            // if (conditions) {
+            //     const firstBatch = this.props.longTermSongs.slice(0, 20);
+            //     const albumIds = firstBatch.map(song => song.album.id).join(",");
+            //     this.props.getTopSongsGenres(albumIds, this.props.token);
+            // }
+
+
         }
-        
 
     }
 
@@ -111,14 +122,19 @@ class Songs extends React.Component {
     }
 }
 
+const mapDispatchToProps = (dispatch) => ({
+    getTopSongsGenres: (albumIds, token) => dispatch(getTopSongsGenres(albumIds, token))
+})
+
 const mapStateToProps = (state) => {
     return {
         shortTermSongs: state.songs.shortTermSongList,
         mediumTermSongs: state.songs.mediumTermSongList,
         longTermSongs: state.songs.longTermSongList,
         timeRange: state.songs.timeRange,
-        fetchSongsComplete: state.songs.fetchSongsComplete
+        fetchSongsComplete: state.songs.fetchSongsComplete,
+        token: state.token.token 
     }
 };
 
-export default connect(mapStateToProps, null)(withStyles(styles)(Songs));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Songs));

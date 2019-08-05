@@ -5,6 +5,7 @@ const initialState = {
     longTermArtistList: [],
     artistIds: [],
     artistGenres: [],
+    topArtistGenres: [],
     relatedArtistIds: [], 
     fetchArtistsSuccess: false,
     fetchArtistsPending: false,
@@ -73,6 +74,12 @@ export const artistsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 timeRange: action.range 
+            }
+        
+        case "ADD_TOP_ARTIST_GENRES":
+            return {
+                ...state,
+                topArtistGenres: action.genres 
             }
     
         default:

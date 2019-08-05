@@ -162,3 +162,5 @@ export function computeGenrePercentages(allGenres) {
 
     return filteredArray;
 }
+
+

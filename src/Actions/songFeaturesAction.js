@@ -52,3 +52,10 @@ export const fetchSongFeatures = (accessToken, ids) => {
     }
 
 }
+
+export const setHoveredIndex = (index) => {
+    return {
+        type: "SET_HOVERED_INDEX",
+        index: index
+    };
+};

@@ -10,7 +10,7 @@ import { Button } from '@material-ui/core';
 
 import { filterGenres } from '../../utils';
 
-import { addArtistGenres } from '../../Actions/artistsAction';
+import { addArtistGenres, addTopArtistGenres } from '../../Actions/artistsAction';
 
 const styles = theme => ({
     list: {
@@ -54,6 +54,7 @@ class Artists extends React.Component {
         if (complete) {
             const allArtists = [...this.props.shortTermArtists, ...this.props.mediumTermArtists, ...this.props.longTermArtists];
             this.props.addGenres(allArtists);
+            this.props.addTopArtistGenres(this.props.longTermArtists);
             this.setState({
                 addedGenres: true
             });
@@ -135,7 +136,8 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    addGenres: (artists) => dispatch(addArtistGenres(artists))
+    addGenres: (artists) => dispatch(addArtistGenres(artists)),
+    addTopArtistGenres: (artists) => dispatch(addTopArtistGenres(artists))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Artists));
