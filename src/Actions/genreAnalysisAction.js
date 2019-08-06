@@ -1,7 +1,8 @@
-export const setCurrentGenre = (genre) => {
+export const setCurrentGenre = (genreIndex) => {
+    console.log(genreIndex);
     return {
         type: "SET_CURRENT_GENRE",
-        genre: genre
+        index: genreIndex 
     };
 };
 

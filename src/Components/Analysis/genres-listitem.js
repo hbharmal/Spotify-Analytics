@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import  { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
 import { setHoveredIndex } from '../../Actions/songFeaturesAction';
+import { setCurrentGenre } from '../../Actions/genreAnalysisAction';
 
 const styles = theme => ({
     root: {
@@ -23,6 +24,7 @@ class GenreListItem extends React.Component {
         super(props);
         this.handleMouseEnter = this.handleMouseEnter.bind(this);
         this.handleMouseLeave = this.handleMouseLeave.bind(this);
+        this.handleMouseClick = this.handleMouseClick.bind(this);
     }
 
     handleMouseEnter(index) {
@@ -33,7 +35,13 @@ class GenreListItem extends React.Component {
         this.props.setHoverIndex(null);
     }
 
+    handleMouseClick(index) {
+        this.props.setCurrentGenre(index);
+    }
+
     render() {
+
+        console.log(this.props);
 
         const { classes } = this.props;
 
@@ -55,7 +63,11 @@ class GenreListItem extends React.Component {
                     border: this.props.hovered ? "solid" : null 
 
                 }}>
-                    <ButtonBase style={{width: '100%', height: '100%'}} onMouseEnter={() => this.handleMouseEnter(this.props.key)} onMouseLeave={() => this.handleMouseLeave()} >
+                    <ButtonBase style={{width: '100%', height: '100%'}} 
+                                onMouseEnter={() => this.handleMouseEnter(this.props.myKey)} 
+                                onMouseLeave={() => this.handleMouseLeave()} 
+                                onClick={() => this.handleMouseClick(this.props.myKey)}
+                                >
                         <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
                             <div style={{justifyContent: 'flex-end', alignItems: 'center', width: '60%'}}>
                                 <CardContent >
@@ -100,7 +112,8 @@ class GenreListItem extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    setHoverIndex: (index) => dispatch(setHoveredIndex(index))
+    setHoverIndex: (index) => dispatch(setHoveredIndex(index)),
+    setCurrentGenre: (index) => dispatch(setCurrentGenre(index))
 });
 
 export default connect(null, mapDispatchToProps)(withStyles(styles)(GenreListItem));

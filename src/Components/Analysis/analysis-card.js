@@ -68,7 +68,7 @@ const mapStateToProps = state => {
         fetchSongsComplete: state.songs.fetchSongsComplete,
         fetchSongFeaturesComplete: state.songFeatures.fetchSongFeaturesComplete,
         songs: state.songs.shortTermSongList,
-        songFeatures: state.songFeatures.songFeatures
+        songFeatures: state.songFeatures.songFeatures,
     };
 };
 

@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import GenreChart from './genre-chart';
 import GenreList from './genres-list';
+import GenreDescription from './genre-description';
 
 import { computeGenrePercentages } from '../../utils';
 
@@ -92,12 +93,21 @@ export class Genres extends React.Component {
 
         const { classes } = this.props; 
 
+        console.log(this.props.currentGenre);
+
         return (
             <div className={classes.root}>
                 <Grid container justify="center">
                     <Grid item xs={12} sm={8} style={{padding: '10px 5px 10px 10px'}}>
                         
-                        {this.state.computedPercentages && <GenreChart genres={this.state.genrePercentages} colors={this.state.colors}/>}
+                        {   this.state.computedPercentages 
+                        && (this.props.currentGenre > 10)  
+                        &&  <GenreChart genres={this.state.genrePercentages} colors={this.state.colors}/> }
+        
+    
+                        {   this.state.computedPercentages 
+                        && (this.props.currentGenre < 10) 
+                        &&  <GenreDescription />}
                     
                     </Grid>
                     <Grid item xs={12} sm={4} style={{padding: '10px 10px 10px 5px'}}>
@@ -116,7 +126,8 @@ export class Genres extends React.Component {
 const mapStateToProps = state => {
     return {
         uniqueGenres: state.artists.artistGenres,
-        topArtistGenres: state.artists.topArtistGenres
+        topArtistGenres: state.artists.topArtistGenres,
+        currentGenre: state.genreAnalysis.currentGenre 
     };
 };
 
