@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import GenreChart from './genre-chart';
 import GenreList from './genres-list';
-import GenreDescription from './genre-description';
+import GenreDescription from './genreDescriptiona/genre-description';
 
 import { computeGenrePercentages } from '../../utils';
 
