@@ -14,9 +14,41 @@ export class GenreDescription extends React.Component {
 
     constructor(props) {
         super(props);
+        this.state = {
+            count: 0,
+            percentage: 0,
+            artists: [],
+            title: "",
+            description: ""
+        }
+    }
+
+    componentWillMount() {
+
+        console.log(this.props);
+
+        const currentGenre = this.props.topArtists[this.props.genre];
+        const genreName = currentGenre.genreName;
+        const counts = this.props.counts;
+        let count = 0;
+        for (let i = 0; i < counts.len; i++) {
+            const currentCount = counts[i];
+            if (currentCount.name == genreName) {
+                count = currentCount.count;
+                break;
+            }
+        }
+        this.setState({
+            count: count, 
+            percentage: this.props.topArtists[this.props.genre].percentage,
+            title: genreName,
+            artists: this.props.topArtists[this.props.genre].topArtists
+        });
     }
 
     render() {
+
+        console.log(this.state);
 
         return (
             <Paper style={{height: 500}}>
@@ -26,17 +58,17 @@ export class GenreDescription extends React.Component {
                                 { /* This will have 3 things: the percentage, the title, and the number of songs in the saved songs list*/}
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 10px'}}>
                                     <PercentageCircle 
-                                        percentage={this.props.topArtists[this.props.genre].percentage}
+                                        percentage={this.state.percentage}
                                     />
                                 </Grid>
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 0px'}} >
                                     <Title 
-                                        title={this.props.topArtists[this.props.genre].genreName}
+                                        title={this.state.title}
                                     />
                                 </Grid>
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 0px'}}>
                                     <SongsCircle 
-                                        numSongs={144}
+                                        numSongs={this.state.count}
                                     />
                                 </Grid>
                             </Grid>
@@ -48,7 +80,7 @@ export class GenreDescription extends React.Component {
                                 </Grid>
                                 <Grid item xs={6} style={{padding: '0px 10px 10px 0px', width: '100%'}}>
                                     <TopArtists 
-                                        artists={this.props.topArtists[this.props.genre].topArtists}
+                                        artists={this.state.artists}
                                     />
                                 </Grid>
                             </Grid>
@@ -62,7 +94,7 @@ export class GenreDescription extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        topArtists: state.genreAnalysis.topArtists
+        topArtists: state.songs.genreSongCount
     };
 };
 

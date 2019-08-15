@@ -4,7 +4,7 @@ const initialState = {
     mediumTermSongList: [],
     longTermSongList: [],
     songIds: [],
-    savedSongs: [],
+    genreSongCount: [],
     fetchSavedSongsSucccess: false,
     fetchSavedSongsPending: false,
     fetchSavedSongsError: false,
@@ -73,7 +73,7 @@ export const songsReducer = (state = initialState, action) => {
         case "ADD_SAVED_SONGS":
             return {
                 ...state,
-                savedSongs: action.songs,
+                genreSongCount: action.songsCount,
                 fetchSavedSongsPending: false,
                 fetchSavedSongsSucccess: true,
                 fetchSavedSongsError: false 

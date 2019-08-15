@@ -84,8 +84,6 @@ export const addSongIds = (ids) => {
 }
 
 export const fetchSavedSongs = (accessToken) => {
-
-    console.log("reached");
     
     return dispatch => {
 
@@ -94,8 +92,11 @@ export const fetchSavedSongs = (accessToken) => {
         fetch(request).then(res => {
             return res.json();
         }).then(res => {
-            console.log(res);
-            dispatch(addSavedSongs(res.items));
+            console.log("DONE!!")
+            const result = Object.keys(res).map(key => {
+                return {"name": key, "count": res[key]}
+            });
+            dispatch(addSavedSongs(result));
         }).catch(err => {
             console.log(err);
         });
@@ -103,10 +104,10 @@ export const fetchSavedSongs = (accessToken) => {
     }
 }
 
-export const addSavedSongs = (songs) => {
+export const addSavedSongs = (items) => {
     return {
         type: 'ADD_SAVED_SONGS',
-        songs: songs 
+        songsCount: items 
     };
 };
 
@@ -123,10 +124,6 @@ export const fetchSavedSongsPending = () => {
 };
 
 export const getTopSongsGenres = (albumIds, accessToken) => {
-
-    console.log("entered")
-    
-    console.log(albumIds);
 
         const request = new Request(`https://api.spotify.com/v1/albums/?ids=${albumIds}`, {
             headers: new Headers({

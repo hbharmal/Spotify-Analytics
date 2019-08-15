@@ -39,6 +39,7 @@
   "scripts": {
     "start": "react-scripts start",
     "dev": "./build-dev.sh",
+    "kill-api": "kill $(lsof -t -i:5000)",
     "test": "echo No Tests"
   },
   "author": "Hussain Bharmal",

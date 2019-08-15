@@ -38,8 +38,6 @@ class Songs:
 
 		items = self.saved_songs
 
-		dictionary = {}
-
 		genre_count_dict = {
 			"alternative": 0,
 			"anime": 0,
@@ -72,12 +70,12 @@ class Songs:
 
 		for item in items:
 
-
 			artists = item["track"]["artists"] 
-			song_id = item["track"]["id"]
 
 			ids_not_in_cache = []
 			genres = [] 
+
+			main_artist = artists[0]
 
 			for artist in artists:
 				artist_id = artist["id"]
@@ -109,13 +107,7 @@ class Songs:
 			for genre in final_genres:
 				genre_count_dict[genre] = genre_count_dict[genre] + 1
 
-			# dictionary[song_id] = final_genres
-
-		# for song_id, final_genres in dictionary.items():
-		# 	for genre in final_genres:
-				
 		return genre_count_dict
-
 
 	@staticmethod
 	def convert_genres(genres):
@@ -172,7 +164,7 @@ class Songs:
 		return final_genres
 
 app = Flask(__name__)
-cors = CORS(app)
+cors = CORS(app, resources={r"/get_songs": {"origins": "http://localhost:8080"}})
 
 @app.route('/get_songs', methods=['GET'])
 def get_songs():
@@ -186,9 +178,10 @@ def get_songs():
 
 	finish_time = time.time()
 
-	print("number of seconds for execution: %s" %(finish_time - start_time))
+	response = jsonify(final_dict)
+	response.headers.add('Access-Control-Allow-Origin', '*')
 
-	return jsonify(final_dict)
+	return response
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0')

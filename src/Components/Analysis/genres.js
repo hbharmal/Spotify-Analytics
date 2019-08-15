@@ -93,8 +93,6 @@ export class Genres extends React.Component {
 
         const { classes } = this.props; 
 
-        console.log(this.props.currentGenre);
-
         return (
             <div className={classes.root}>
                 <Grid container justify="center">
@@ -107,7 +105,7 @@ export class Genres extends React.Component {
     
                         {   this.state.computedPercentages 
                         && (this.props.currentGenre < 10) 
-                        &&  <GenreDescription genre={this.props.currentGenre}/>}
+                        &&  <GenreDescription genre={this.props.currentGenre} counts={this.props.genreSongCount}/>}
                     
                     </Grid>
                     <Grid item xs={12} sm={4} style={{padding: '10px 10px 10px 5px'}}>
@@ -127,7 +125,8 @@ const mapStateToProps = state => {
     return {
         uniqueGenres: state.artists.artistGenres,
         topArtistGenres: state.artists.topArtistGenres,
-        currentGenre: state.genreAnalysis.currentGenre 
+        currentGenre: state.genreAnalysis.currentGenre,
+        genreSongCount: state.songs.genreSongCount
     };
 };
 
