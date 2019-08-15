@@ -4,21 +4,42 @@ from flask import Flask, request
 from flask.json import jsonify 
 from flask_cors import CORS, cross_origin
 import re
+import time 
 
 class Songs:
 
 	def __init__(self, token):
 		self.token = token 
 		self.headers = {'Authorization' : 'Bearer ' + self.token}
-		self.artist_ids = []
+		self.saved_songs = []
+		self.cache = {}
 
-	def get_recent_songs():
+	def get_saved_songs(self):
 		url = 'https://api.spotify.com/v1/me/tracks'
 		params = {'offset': 50}
 
 		items = []
 
+		spotify_request = requests.get(url=url, params=params, headers=self.headers)
+		data = spotify_request.json() 
+		items.extend(data['items'])
+
+		while(data['next'] != None):
+			url = data['next']
+			spotify_request = requests.get(url=url, params=params, headers=self.headers)
+			data = spotify_request.json()
+			items.extend(data['items'])
+
+		self.saved_songs = items 
+
+	def get_genre_dict(self):
+
+		self.get_saved_songs()
+
+		items = self.saved_songs
+
 		dictionary = {}
+
 		genre_count_dict = {
 			"alternative": 0,
 			"anime": 0,
@@ -49,47 +70,54 @@ class Songs:
 			"sleep": 0 
 		}
 
-		spotify_request = requests.get(url=url, params=params, headers=self.headers)
-		data = spotify_request.json() 
-		items.extend(data['items'])
-
-		while(data['next'] != None):
-			url = data['next']
-			spotify_request = requests.get(url=url, params=params, headers=headers)
-			data = spotify_request.json()
-			items.extend(data['items'])
-
 		for item in items:
 
-			artists = item.track.artists 
-			song_id = item.track.id 
 
-			ids = [artist.id for artist in artists]
-			s = ","
-			ids_str = s.join(ids)
+			artists = item["track"]["artists"] 
+			song_id = item["track"]["id"]
 
-			url = 'https://api.spotify.com/v1/artists'
-			params = {'ids': ids_str}
+			ids_not_in_cache = []
+			genres = [] 
 
-			spotify_request = requests.get(url=url, params=params, headers=self.headers)
-			data = spotify_request.json() 
+			for artist in artists:
+				artist_id = artist["id"]
+				if artist_id in self.cache:
+					genres.extend(self.cache[artist_id]["genres"])
+				else:
+					ids_not_in_cache.append(artist_id)
 
-			genres = []
-			for artist in data.artists:
-				genres.extend(artist.genres)
+			if len(ids_not_in_cache) > 0:
+				s = ","
+				ids_str = s.join(ids_not_in_cache)
 
-			final_genres = convert_genres(genres)
+				url = 'https://api.spotify.com/v1/artists'
+				params = {'ids': ids_str}
 
-			dictionary[song_id] = final_genres
+				spotify_request = requests.get(url=url, params=params, headers=self.headers)
+				data = spotify_request.json() 
 
-		for song_id, final_genres in dictionary.items():
+				print(json.dumps(data, indent=4))
+
+				for artist in data["artists"]:
+
+					artist_id = artist["id"]
+					self.cache[artist_id] = artist 
+
+					genres.extend(artist["genres"])
+
+			final_genres = Songs.convert_genres(genres)
 			for genre in final_genres:
 				genre_count_dict[genre] = genre_count_dict[genre] + 1
 
+			# dictionary[song_id] = final_genres
+
+		# for song_id, final_genres in dictionary.items():
+		# 	for genre in final_genres:
+				
 		return genre_count_dict
 
 
-	@classmethod
+	@staticmethod
 	def convert_genres(genres):
 
 		dictionary = {
@@ -124,7 +152,7 @@ class Songs:
 
 		for i in range(len(genres)):
 			element = genres[i].lower()
-			if (dictionary[element] != None && dictionary[element] == False):
+			if (element in dictionary and dictionary[element] == False):
 				dictionary[element] = True 
 				continue
 			current_array = re.split(r'[\s-]+', genres[i])
@@ -136,41 +164,12 @@ class Songs:
 					dictionary["electronic"] = True
 					continue
 
-				if (dictionary[element] != None && dictionary[element] == False):
+				if (element in dictionary and dictionary[element] == False):
 					dictionary[element] = True 
 
 		final_genres = [key for key,value in dictionary.items() if value == True]
 
 		return final_genres
-
-
-
-def get_recent_songs(token):
-	url = 'https://api.spotify.com/v1/me/tracks'
-	headers = {'Authorization' : 'Bearer ' + token}
-	params = {'offset': 50}
-
-	items = []
-
-	spotify_request = requests.get(url=url, params=params, headers=headers)
-	if (spotify_request.status_code == 500):
-		return (items, 500)
-
-	data = spotify_request.json() 
-
-	if (data['items'] != None):
-		items.extend(data['items'])
-
-	while(data['next'] != None):
-		url = data['next']
-		spotify_request = requests.get(url=url, params=params, headers=headers)
-		data = spotify_request.json()
-		if (data != None and data['items'] != None):
-			items.extend(data['items'])
-
-	return (items, 200)
-
-
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -178,8 +177,18 @@ cors = CORS(app)
 @app.route('/get_songs', methods=['GET'])
 def get_songs():
 	token = request.args.get('token')
-	items, status_code = get_recent_songs(token)
-	return jsonify({'items': items, 'status_code': status_code})
+
+	songs = Songs(token)
+
+	start_time = time.time() 
+
+	final_dict = songs.get_genre_dict()
+
+	finish_time = time.time()
+
+	print("number of seconds for execution: %s" %(finish_time - start_time))
+
+	return jsonify(final_dict)
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0')
