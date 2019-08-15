@@ -7,9 +7,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import  { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-
 import { setHoveredIndex } from '../../Actions/songFeaturesAction';
+import { setCurrentGenre } from '../../Actions/genreAnalysisAction';
 
 const styles = theme => ({
     root: {
@@ -23,6 +22,7 @@ class GenreListItem extends React.Component {
         super(props);
         this.handleMouseEnter = this.handleMouseEnter.bind(this);
         this.handleMouseLeave = this.handleMouseLeave.bind(this);
+        this.handleMouseClick = this.handleMouseClick.bind(this);
     }
 
     handleMouseEnter(index) {
@@ -31,6 +31,10 @@ class GenreListItem extends React.Component {
 
     handleMouseLeave() {
         this.props.setHoverIndex(null);
+    }
+
+    handleMouseClick(index) {
+        this.props.setCurrentGenre(index);
     }
 
     render() {
@@ -47,15 +51,20 @@ class GenreListItem extends React.Component {
             <div style={{padding: "0px 5px 15px 5px", margin: "0px"}} >
                 <Card className={classes.root} raised={false} style={{
                     backgroundColor: this.props.color,
+                    opacity: this.props.currentGenre < 100 && (this.props.currentGenre != this.props.myKey) ? "0.4" : null ,
                     padding: "0px",
                     height: `${(500 / 6) - 15}px`,
-                    borderColor: this.props.hovered ? "#C43a31" : null,
-                    borderRadius: this.props.hovered ? 5 : null,
-                    borderWidth: this.props.hovered ? "5px" : null,
-                    border: this.props.hovered ? "solid" : null 
+                    borderColor: this.props.hovered || this.props.currentGenre == this.props.myKey ? "#C43a31" : null,
+                    borderRadius: this.props.hovered || this.props.currentGenre == this.props.myKey ? 5 : null,
+                    borderWidth: this.props.hovered || this.props.currentGenre == this.props.myKey ? "5px" : null,
+                    border: this.props.hovered || this.props.currentGenre == this.props.myKey ? "solid" : null 
 
                 }}>
-                    <ButtonBase style={{width: '100%', height: '100%'}} onMouseEnter={() => this.handleMouseEnter(this.props.key)} onMouseLeave={() => this.handleMouseLeave()} >
+                    <ButtonBase style={{width: '100%', height: '100%'}} 
+                                onMouseEnter={() => this.handleMouseEnter(this.props.myKey)} 
+                                onMouseLeave={() => this.handleMouseLeave()} 
+                                onClick={() => this.handleMouseClick(this.props.myKey)}
+                                >
                         <div style={{display: 'flex', flexDirection: 'row', width: '100%'}}>
                             <div style={{justifyContent: 'flex-end', alignItems: 'center', width: '60%'}}>
                                 <CardContent >
@@ -99,8 +108,15 @@ class GenreListItem extends React.Component {
 
 }
 
+const mapStateToProps = (state) => {
+    return {
+        currentGenre: state.genreAnalysis.currentGenre 
+    };
+};
+
 const mapDispatchToProps = (dispatch) => ({
-    setHoverIndex: (index) => dispatch(setHoveredIndex(index))
+    setHoverIndex: (index) => dispatch(setHoveredIndex(index)),
+    setCurrentGenre: (index) => dispatch(setCurrentGenre(index))
 });
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(GenreListItem));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(GenreListItem));

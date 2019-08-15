@@ -83,26 +83,65 @@ export const addSongIds = (ids) => {
     }
 }
 
-// export const getTopSongsGenres = (albumIds, accessToken) => {
+export const fetchSavedSongs = (accessToken) => {
 
-//     console.log("entered")
+    console.log("reached");
     
-//     console.log(albumIds);
+    return dispatch => {
 
-//         const request = new Request(`https://api.spotify.com/v1/albums/?ids=${albumIds}`, {
-//             headers: new Headers({
-//                 'Authorization': 'Bearer ' + accessToken
-//             })
-//         });
+        const request = new Request(`http://localhost:5000/get_songs?token=${accessToken}`);
 
-//         return dispatch => {
-//             fetch(request).then(res => {
-//                 res.json();
-//             }).then(items => {
-//                 console.log(items);
-//             });
-//         }
+        fetch(request).then(res => {
+            return res.json();
+        }).then(res => {
+            console.log(res);
+            dispatch(addSavedSongs(res.items));
+        }).catch(err => {
+            console.log(err);
+        });
 
-// }
+    }
+}
+
+export const addSavedSongs = (songs) => {
+    return {
+        type: 'ADD_SAVED_SONGS',
+        songs: songs 
+    };
+};
+
+export const fetchSavedSongsError = (error) => {
+    return {
+        type: 'FETCH_SAVED_SONGS_ERROR'
+    };
+};
+
+export const fetchSavedSongsPending = () => {
+    return {
+        type: 'FETCH_SAVED_SONGS_PENDING'
+    };
+};
+
+export const getTopSongsGenres = (albumIds, accessToken) => {
+
+    console.log("entered")
+    
+    console.log(albumIds);
+
+        const request = new Request(`https://api.spotify.com/v1/albums/?ids=${albumIds}`, {
+            headers: new Headers({
+                'Authorization': 'Bearer ' + accessToken
+            })
+        });
+
+        return dispatch => {
+            fetch(request).then(res => {
+                res.json();
+            }).then(items => {
+                console.log(items);
+            });
+        }
+
+}
 
 

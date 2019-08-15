@@ -4,7 +4,7 @@
 const initialState = {
     topGenres: [],
     topArtists: [],
-    currentGenre: null 
+    currentGenre: 100
 };
 
 export const genreAnalysisReducer = (state = initialState, action) => {
@@ -13,7 +13,7 @@ export const genreAnalysisReducer = (state = initialState, action) => {
         case "SET_CURRENT_GENRE":
             return {
                 ...state, 
-                currentGenre: action.genre 
+                currentGenre: action.index  
             }
         
         case "SET_TOP_GENRES":

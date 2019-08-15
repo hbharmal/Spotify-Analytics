@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot",
+    "dev": "./build-dev.sh",
     "test": "echo No Tests"
   },
   "author": "Hussain Bharmal",

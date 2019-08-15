@@ -110,7 +110,10 @@ export const addTopArtistGenres = (artists) => {
     const genres = artists.map(artist => {
         return {  
             artist: artist.name, 
-            genres: filterGenres(artist.genres)
+            genres: filterGenres(artist.genres),
+            imageUrl: artist.images[1].url,
+            popularity: artist.popularity,
+            externalUrl: artist.external_urls.spotify
         }
     });
 
