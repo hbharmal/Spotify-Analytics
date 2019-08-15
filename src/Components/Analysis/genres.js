@@ -107,7 +107,7 @@ export class Genres extends React.Component {
     
                         {   this.state.computedPercentages 
                         && (this.props.currentGenre < 10) 
-                        &&  <GenreDescription />}
+                        &&  <GenreDescription genre={this.props.currentGenre}/>}
                     
                     </Grid>
                     <Grid item xs={12} sm={4} style={{padding: '10px 10px 10px 5px'}}>

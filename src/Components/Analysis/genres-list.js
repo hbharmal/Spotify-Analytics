@@ -22,7 +22,7 @@ export class GenreList extends React.Component {
         
 
         this.props.genres.map((object, index) => {
-            genreListItems.push(<GenreListItem genreName={object.genreName} color={object.color} myKey={index} hovered={index == this.props.index ? true : false} percentage={object.percentage}></GenreListItem>);
+            genreListItems.push(<GenreListItem genreName={object.genreName} color={object.color} myKey={index} key={index} hovered={index == this.props.index ? true : false} percentage={object.percentage}></GenreListItem>);
         });
 
         // // reindex genreListItems 

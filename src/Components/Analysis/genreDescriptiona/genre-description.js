@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
@@ -16,6 +17,7 @@ export class GenreDescription extends React.Component {
     }
 
     render() {
+
         return (
             <Paper style={{height: 500}}>
                 <Grid container direction="column" style={{height: '100%', width: '100%'}} >
@@ -23,13 +25,19 @@ export class GenreDescription extends React.Component {
                             <Grid container direction="row" style={{height: '100%'}} >
                                 { /* This will have 3 things: the percentage, the title, and the number of songs in the saved songs list*/}
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 10px'}}>
-                                    <PercentageCircle />
+                                    <PercentageCircle 
+                                        percentage={this.props.topArtists[this.props.genre].percentage}
+                                    />
                                 </Grid>
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 0px'}} >
-                                    <Title />
+                                    <Title 
+                                        title={this.props.topArtists[this.props.genre].genreName}
+                                    />
                                 </Grid>
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 0px'}}>
-                                    <SongsCircle />
+                                    <SongsCircle 
+                                        numSongs={144}
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -39,7 +47,9 @@ export class GenreDescription extends React.Component {
                                     <Description />
                                 </Grid>
                                 <Grid item xs={6} style={{padding: '0px 10px 10px 0px', width: '100%'}}>
-                                    <TopArtists />
+                                    <TopArtists 
+                                        artists={this.props.topArtists[this.props.genre].topArtists}
+                                    />
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -50,4 +60,10 @@ export class GenreDescription extends React.Component {
 
 }
 
-export default GenreDescription;
+const mapStateToProps = (state) => {
+    return {
+        topArtists: state.genreAnalysis.topArtists
+    };
+};
+
+export default connect(mapStateToProps, null)(GenreDescription);

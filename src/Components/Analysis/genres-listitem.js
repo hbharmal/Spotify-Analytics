@@ -7,8 +7,6 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import  { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-
 import { setHoveredIndex } from '../../Actions/songFeaturesAction';
 import { setCurrentGenre } from '../../Actions/genreAnalysisAction';
 
@@ -41,8 +39,6 @@ class GenreListItem extends React.Component {
 
     render() {
 
-        console.log(this.props);
-
         const { classes } = this.props;
 
         const filteredName = this.props.genreName.slice(0, 1).toUpperCase() + this.props.genreName.slice(1);
@@ -55,12 +51,13 @@ class GenreListItem extends React.Component {
             <div style={{padding: "0px 5px 15px 5px", margin: "0px"}} >
                 <Card className={classes.root} raised={false} style={{
                     backgroundColor: this.props.color,
+                    opacity: this.props.currentGenre < 100 && (this.props.currentGenre != this.props.myKey) ? "0.4" : null ,
                     padding: "0px",
                     height: `${(500 / 6) - 15}px`,
-                    borderColor: this.props.hovered ? "#C43a31" : null,
-                    borderRadius: this.props.hovered ? 5 : null,
-                    borderWidth: this.props.hovered ? "5px" : null,
-                    border: this.props.hovered ? "solid" : null 
+                    borderColor: this.props.hovered || this.props.currentGenre == this.props.myKey ? "#C43a31" : null,
+                    borderRadius: this.props.hovered || this.props.currentGenre == this.props.myKey ? 5 : null,
+                    borderWidth: this.props.hovered || this.props.currentGenre == this.props.myKey ? "5px" : null,
+                    border: this.props.hovered || this.props.currentGenre == this.props.myKey ? "solid" : null 
 
                 }}>
                     <ButtonBase style={{width: '100%', height: '100%'}} 
@@ -111,9 +108,15 @@ class GenreListItem extends React.Component {
 
 }
 
+const mapStateToProps = (state) => {
+    return {
+        currentGenre: state.genreAnalysis.currentGenre 
+    };
+};
+
 const mapDispatchToProps = (dispatch) => ({
     setHoverIndex: (index) => dispatch(setHoveredIndex(index)),
     setCurrentGenre: (index) => dispatch(setCurrentGenre(index))
 });
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(GenreListItem));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(GenreListItem));

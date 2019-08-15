@@ -13,7 +13,9 @@ export const setTopGenres = (genres) => {
     };
 };
 
-export const setTopArtists = (genres, topArtists) => {
+export const setTopArtists = (genres, topArtists, savedSongs) => {
+
+    
 
     // items is going to be an array ob json objects that map each genre to its top artists
 
@@ -31,7 +33,7 @@ export const setTopArtists = (genres, topArtists) => {
             for (let k = 0; k < genres.length; k++) {
                 
                 if (genres[k].toLowerCase() === genreName.toLowerCase()) {
-                    topGenreArtists.push(name);
+                    topGenreArtists.push(topArtists[j]);
                 }
             }
 
@@ -46,6 +48,12 @@ export const setTopArtists = (genres, topArtists) => {
         )
 
     }
+
+    
+
+
+
+
 
     return {
         type: "SET_TOP_ARTISTS",

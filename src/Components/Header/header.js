@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 
 import { fetchArtists, fetchArtistsPending, fetchArtistsComplete } from '../../Actions/artistsAction';
-import { fetchSongs, fetchSongsPending, fetchSongsComplete, addSongIds } from '../../Actions/songsAction';
+import { fetchSongs, fetchSongsPending, fetchSongsComplete, addSongIds, fetchSavedSongs } from '../../Actions/songsAction';
 import { fetchUserinfo, fetchUserinfoPending, fetchUserinfoComplete } from '../../Actions/userinfoAction';
 
 import LoginButton from './login-button'
@@ -70,7 +70,8 @@ class Header extends React.Component {
                 this.props.fetchSongs(this.props.token, 0),
                 this.props.fetchSongs(this.props.token, 1),
                 this.props.fetchSongs(this.props.token, 2),
-                this.props.fetchUserinfo(this.props.token)
+                this.props.fetchUserinfo(this.props.token),
+                this.props.fetchSavedSongs(this.props.token)
             ]).then(() => {
                 this.props.fetchArtistsComplete();
                 this.props.fetchSongsComplete();
@@ -145,7 +146,8 @@ const mapDispatchToProps = dispatch => ({
     fetchUserinfoPending: () => dispatch(fetchUserinfoPending()),
     fetchUserinfo: (token) => dispatch(fetchUserinfo(token)),
     fetchUserinfoComplete: () => dispatch(fetchUserinfoComplete()),
-    addSongIds: (ids) => dispatch(addSongIds(ids))
+    addSongIds: (ids) => dispatch(addSongIds(ids)),
+    fetchSavedSongs: (token) => dispatch(fetchSavedSongs(token))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Header));

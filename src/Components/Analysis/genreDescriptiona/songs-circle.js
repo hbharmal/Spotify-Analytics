@@ -4,6 +4,10 @@ import Typography from '@material-ui/core/Typography';
 
 export class SongsCircle extends React.Component {
 
+    constructor(props) {
+        super(props);
+    }
+
     render() {
 
         return (
@@ -18,8 +22,8 @@ export class SongsCircle extends React.Component {
                     </defs>
                         <circle cx="75" cy="70" r="60" fill="url(#grad1)"
                         />
-                        <text x="50%" y="50%" textAnchor="middle" dy="0.3em" fontSize="40">
-                            5%
+                        <text x="50%" y="50%" textAnchor="middle" dy="0.3em" fontSize="25">
+                            {this.props.numSongs} songs
                         </text>
                     </svg>
                 </div>

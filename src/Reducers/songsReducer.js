@@ -4,6 +4,10 @@ const initialState = {
     mediumTermSongList: [],
     longTermSongList: [],
     songIds: [],
+    savedSongs: [],
+    fetchSavedSongsSucccess: false,
+    fetchSavedSongsPending: false,
+    fetchSavedSongsError: false,
     fetchSongsSuccess: false,
     fetchSongsPending: false,
     fetchSongsComplete: false 
@@ -64,6 +68,29 @@ export const songsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 timeRange: action.range 
+            }
+
+        case "ADD_SAVED_SONGS":
+            return {
+                ...state,
+                savedSongs: action.songs,
+                fetchSavedSongsPending: false,
+                fetchSavedSongsSucccess: true,
+                fetchSavedSongsError: false 
+            }
+
+        case "FETCH_SAVED_SONGS_PENDING":
+            return {
+                ...state,
+                fetchSavedSongsPending: true 
+            }
+        
+        case "FETCH_SAVED_SONGS_ERROR":
+            return {
+                ...state,
+                fetchSavedSongsError: true,
+                fetchSavedSongsPending: false,
+                fetchSavedSongsSucccess: false 
             }
     
         default:
