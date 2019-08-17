@@ -14,41 +14,13 @@ export class GenreDescription extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            count: 0,
-            percentage: 0,
-            artists: [],
-            title: "",
-            description: ""
-        }
-    }
-
-    componentWillMount() {
-
-        console.log(this.props);
-
-        const currentGenre = this.props.topArtists[this.props.genre];
-        const genreName = currentGenre.genreName;
-        const counts = this.props.counts;
-        let count = 0;
-        for (let i = 0; i < counts.len; i++) {
-            const currentCount = counts[i];
-            if (currentCount.name == genreName) {
-                count = currentCount.count;
-                break;
-            }
-        }
-        this.setState({
-            count: count, 
-            percentage: this.props.topArtists[this.props.genre].percentage,
-            title: genreName,
-            artists: this.props.topArtists[this.props.genre].topArtists
-        });
     }
 
     render() {
 
-        console.log(this.state);
+        const currentGenre = this.props.topGenres[this.props.genre]
+
+        console.log(currentGenre);
 
         return (
             <Paper style={{height: 500}}>
@@ -94,8 +66,8 @@ export class GenreDescription extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        topArtists: state.songs.genreSongCount
-    };
-};
+        topGenres: state.genreAnalysis.topGenres
+    }
+}
 
 export default connect(mapStateToProps, null)(GenreDescription);

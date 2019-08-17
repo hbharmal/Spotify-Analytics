@@ -6,16 +6,7 @@ export const setCurrentGenre = (genreIndex) => {
     };
 };
 
-export const setTopGenres = (genres) => {
-    return {
-        type: "SET_TOP_GENRES",
-        genres: genres 
-    };
-};
-
-export const setTopArtists = (genres, topArtists, savedSongs) => {
-
-    
+export const setTopGenres = (genres, topArtists, counts) => {
 
     // items is going to be an array ob json objects that map each genre to its top artists
 
@@ -32,7 +23,7 @@ export const setTopArtists = (genres, topArtists, savedSongs) => {
 
             for (let k = 0; k < genres.length; k++) {
                 
-                if (genres[k].toLowerCase() === genreName.toLowerCase()) {
+                if (genres[k].toLowerCase() == genreName.toLowerCase()) {
                     topGenreArtists.push(topArtists[j]);
                 }
             }
@@ -43,20 +34,22 @@ export const setTopArtists = (genres, topArtists, savedSongs) => {
 
         }
 
+        let count = 0;
+        for (let j = 0; j < counts.length; i++) {
+            if (counts[j].name.toLowerCase() == genreName.toLowerCase()) {
+                count = counts[j].count;
+                break;
+            }
+        }
+
         items.push(
-            { ...genres[i], "topArtists": topGenreArtists}
+            { ...genres[i], "topArtists": topGenreArtists, "count": count}
         )
 
     }
 
-    
-
-
-
-
-
     return {
-        type: "SET_TOP_ARTISTS",
+        type: "SET_TOP_GENRES",
         items: items 
     };
 };

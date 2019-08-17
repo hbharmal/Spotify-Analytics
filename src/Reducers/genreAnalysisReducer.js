@@ -22,12 +22,6 @@ export const genreAnalysisReducer = (state = initialState, action) => {
                 topGenres: action.genres 
             }
         
-        case "SET_TOP_ARTISTS":
-            return {
-                ...state, 
-                topArtists: action.items 
-            }
-        
         default: 
             return {
                 ...state 

@@ -12,7 +12,7 @@ import GenreDescription from './genreDescriptiona/genre-description';
 
 import { computeGenrePercentages } from '../../utils';
 
-import { setTopGenres, setTopArtists } from '../../Actions/genreAnalysisAction';
+import { setTopGenres } from '../../Actions/genreAnalysisAction';
 
 const styles = theme => ({
     root: {
@@ -76,8 +76,7 @@ export class Genres extends React.Component {
                 }
             });
 
-            this.props.setTopGenres(genreItemsDictArray);
-            this.props.setTopArtists(genreItemsDictArray, this.props.topArtistGenres);
+            this.props.setTopGenres(genreItemsDictArray, this.props.topArtistGenres, this.props.genreSongCount);
             
             this.setState({
                 genrePercentages: filteredDictArray,
@@ -92,7 +91,7 @@ export class Genres extends React.Component {
     render() {
 
         const { classes } = this.props; 
-
+        
         return (
             <div className={classes.root}>
                 <Grid container justify="center">
@@ -131,8 +130,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-    setTopGenres: (genres) => dispatch(setTopGenres(genres)),
-    setTopArtists: (genres, artists) => dispatch(setTopArtists(genres, artists))
+    setTopGenres: (genres, artists, counts) => dispatch(setTopGenres(genres, artists, counts)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Genres));
