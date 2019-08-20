@@ -8,7 +8,7 @@ import AnalysisButton from './analysis-button';
 import Genres from './genresAnalysis/genres';
 import Features from './songFeaturesAnalysis/features';
 
-import { fetchSongFeaturesPending, fetchSongFeaturesComplete, fetchSongFeatures } from '../../Actions/analysisAction';
+import { fetchSongFeaturesPending, fetchSongFeaturesComplete, fetchSongFeatures } from '../../Actions/songFeaturesAnalysisAction';
 
 const styles = theme => ({
     root: {
@@ -33,17 +33,21 @@ class AnalysisCard extends React.Component {
 
     componentDidUpdate() {
 
-        if (this.props.fetchSongsComplete && !this.props.fetchSongFeaturesComplete) {
+        const conditions = this.props.shortTermSongs.length > 0 
+                        && this.props.mediumTermSongs.length > 0
+                        && this.props.longTermSongs.length > 0
+
+        if (conditions && !this.props.songFeaturesComplete) {
+
             const shortTermIds = this.props.shortTermSongs.map(song => song.id);
             const mediumTermIds = this.props.mediumTermSongs.map(song => song.id);
             const longTermIds = this.props.longTermSongs.map(song => song.id);
 
             this.props.fetchSongFeaturesPending();
-
             Promise.all([
-                this.props.fetchSongFeatures(this.props.token, shortTermIds),
-                this.props.fetchSongFeatures(this.props.token, mediumTermIds),
-                this.props.fetchSongFeatures(tihs.props.token, longTermIds)
+                this.props.fetchSongFeatures(this.props.token, shortTermIds, 0),
+                this.props.fetchSongFeatures(this.props.token, mediumTermIds, 1),
+                this.props.fetchSongFeatures(this.props.token, longTermIds, 2)
             ]).then(() => {
                 this.props.fetchSongFeaturesComplete();
             });
@@ -74,11 +78,11 @@ const mapStateToProps = state => {
     return {
         token: state.token.token,
         fetchTokenSuccess: state.token.fetchTokenSuccess,
-        fetchSongsComplete: state.songs.fetchSongsComplete,
-        fetchSongFeaturesComplete: state.songFeaturesAnalysis.fetchSongFeaturesComplete,
+        songsComplete: state.songs.fetchSongsComplete,
+        songFeaturesComplete: state.songFeaturesAnalysis.fetchSongFeaturesComplete,
         shortTermSongs: state.songs.shortTermSongList,
         mediumTermSongs: state.songs.mediumTermSongList,
-        longTermSongs: state.songs.longTermSongsList,
+        longTermSongs: state.songs.longTermSongList,
         mode: state.analysis.mode,
         songFeatures: state.songFeaturesAnalysis.shortTermSongFeatures
     };
@@ -86,7 +90,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     fetchSongFeaturesPending: () => dispatch(fetchSongFeaturesPending()),
-    fetchSongFeatures: (token, ids) => dispatch(fetchSongFeatures(token, ids)),
+    fetchSongFeatures: (token, ids, timePeriod) => dispatch(fetchSongFeatures(token, ids, timePeriod)),
     fetchSongFeaturesComplete: () => dispatch(fetchSongFeaturesComplete())
 });
 

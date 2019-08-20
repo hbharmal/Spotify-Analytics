@@ -28,21 +28,21 @@ export const songFeaturesAnalysisReducer = (state = initialState, action) => {
             return {
                 ...state, 
                 fetchSongFeaturesSuccess: true,
-                songFeatures: action.songFeatures
+                shortTermSongFeatures: action.songFeatures
             }
 
         case 'FETCH_MEDIUM_TERM_SONG_FEATURES_SUCCESS':
             return {
                 ...state, 
                 fetchSongFeaturesSuccess: true,
-                songFeatures: action.songFeatures
+                mediumTermSongFeatures: action.songFeatures
             }
         
         case 'FETCH_LONG_TERM_SONG_FEATURES_SUCCESS':
             return {
                 ...state, 
                 fetchSongFeaturesSuccess: true,
-                songFeatures: action.songFeatures
+                longTermSongFeatures: action.songFeatures
             }
         
         case 'FETCH_SONG_FEATURES_ERROR':

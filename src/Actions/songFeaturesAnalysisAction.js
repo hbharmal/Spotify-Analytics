@@ -1,3 +1,5 @@
+import { reduceFeatures } from "../utils";
+
 export const fetchSongFeaturesPending = () => {
     return {
         type: 'FETCH_SONG_FEATURES_PENDING'
@@ -40,10 +42,10 @@ export const fetchSongFeaturesError = (error) => {
 
 export const fetchSongFeatures = (accessToken, ids, timePeriod) => {
 
+    const idsString = ids.join(",");
+
     // time period is a variable that indicates the time range for the song features
     // 1: short, 2: medium, 3: long
-
-    const idsString = ids.join(",");
 
     return dispatch => {
         const request = new Request(`https://api.spotify.com/v1/audio-features/?ids=${idsString}`, {
@@ -55,13 +57,14 @@ export const fetchSongFeatures = (accessToken, ids, timePeriod) => {
         fetch(request).then(res => {
             return res.json();
         }).then(data => {
+            const filteredData = reduceFeatures(data.audio_features);
             switch (timePeriod) {
                 case 1: 
-                    dispatch(fetchShortTermSongFeaturesSuccess(data));
+                    dispatch(fetchShortTermSongFeaturesSuccess(filteredData));
                 case 2: 
-                    dispatch(fetchMediumTermSongFeaturesSuccess(data));
+                    dispatch(fetchMediumTermSongFeaturesSuccess(filteredData));
                 case 3:
-                    dispatch(fetchLongTermSongFeaturesSuccess(data));
+                    dispatch(fetchLongTermSongFeaturesSuccess(filteredData));
             }
         }).catch(err => {
             dispatch(fetchSongFeaturesError(err));

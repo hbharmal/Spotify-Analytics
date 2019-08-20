@@ -163,4 +163,78 @@ export function computeGenrePercentages(allGenres) {
     return filteredArray;
 }
 
+export function reduceFeatures(features) {
+    
+    const len = features.length; 
 
+    let danceabilityTotal = 0;
+    let energyTotal = 0;
+    let acousticnessTotal = 0;
+    let instrumentalnessTotal = 0;
+    let valenceTotal = 0;
+    let tempoTotal = 0;
+    let durationTotal = 0;
+    let modeCounts = {};
+    let keyCounts = {};
+
+    for (let i = 0; i < features.length; i++) {
+        danceabilityTotal += features[i].danceability;
+        energyTotal += features[i].energy;
+        acousticnessTotal += features[i].acousticness;
+        instrumentalnessTotal += features[i].instrumentalness;
+        valenceTotal += features[i].valence;
+        tempoTotal += features[i].tempo;
+        durationTotal += features[i].duration_ms;
+
+        if (modeCounts[features[i].mode] != undefined) {
+            modeCounts[features[i].mode] = modeCounts[features[i].mode] + 1;
+        } else {
+            modeCounts[features[i].mode] = 1;
+        }
+
+        if (keyCounts[features[i].key] != undefined) {
+            keyCounts[features[i].key] = keyCounts[features[i].key] + 1;
+        } else {
+            keyCounts[features[i].key] = 1;
+        };
+
+    }
+
+    let maxMode = "";
+    let maxModeCount = 0;
+
+    let maxKey = "";
+    let maxKeyCount = 0;
+
+    console.log(modeCounts);
+    console.log(keyCounts);
+
+    Object.keys(modeCounts).map(key => {
+        if (modeCounts[key] >= maxModeCount) {
+            maxModeCount = modeCounts[key];
+            maxMode = key;
+        }
+    });
+
+    Object.keys(keyCounts).map(key => {
+        if (keyCounts[key] >= maxKeyCount) {
+            maxKeyCount = keyCounts[key];
+            maxKey = key;
+        }
+    });
+
+    let reducedFeatures = {
+        "danceability": Number(danceabilityTotal / len).toFixed(3),
+        "energy": Number(energyTotal / len).toFixed(3),
+        "acousticness": Number(acousticnessTotal / len).toFixed(3),
+        "instrumentalness": Number(instrumentalnessTotal / len).toFixed(3),
+        "valence": Number(valenceTotal / len).toFixed(3), 
+        "tempo": Number(tempoTotal / len).toFixed(3),
+        "mode": maxMode,
+        "key": maxKey,
+        "duration": Number(durationTotal / len).toFixed(0)
+    };
+
+    return reducedFeatures;
+
+}
