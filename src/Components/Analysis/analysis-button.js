@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import { AppBar, Tabs, Tab } from '@material-ui/core';
 
-import { changeAnalysisMode } from '../../Actions/songFeaturesAction';
+import { changeAnalysisMode } from '../../Actions/analysisAction';
 
 const styles = theme => ({
     root: {
@@ -47,7 +47,7 @@ class AnalysisButton extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        mode: state.songFeatures.mode 
+        mode: state.analysis.mode 
     }
 }
 

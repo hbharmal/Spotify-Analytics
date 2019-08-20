@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 
 import GenreListItem from './genres-listitem';
 
-
-
 export class GenreList extends React.Component {
 
     constructor(props) {
@@ -41,7 +39,7 @@ export class GenreList extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        index: state.songFeatures.hoveredIndex
+        index: state.analysis.hoveredIndex
     }
 }
 

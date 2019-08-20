@@ -1,22 +1,15 @@
 const initialState = {
-    mode: 0,
-    songFeatures: [],
+    shortTermSongFeatures: [],
+    mediumTermSongFeatures: [],
+    longTermSongFeatures: [],
     fetchSongFeaturesSuccess: false,
     fetchSongFeaturesPending: false,
-    fetchSongFeaturesComplete: false, 
-    hoveredIndex: null
-    
+    fetchSongFeaturesComplete: false
 }
 
-export const songfeaturesReducer = (state = initialState, action) => {
-
+export const songFeaturesAnalysisReducer = (state = initialState, action) => {
+    
     switch (action.type) {
-        
-        case 'CHANGE_ANALYSIS_MODE':
-            return {
-                ...state,
-                mode: action.mode 
-            }
 
         case 'FETCH_SONG_FEATURES_PENDING':
             return {
@@ -31,7 +24,21 @@ export const songfeaturesReducer = (state = initialState, action) => {
                 fetchSongFeaturesComplete: true 
             }
         
-        case 'FETCH_SONG_FEATURES_SUCCESS':
+        case 'FETCH_SHORT_TERM_SONG_FEATURES_SUCCESS':
+            return {
+                ...state, 
+                fetchSongFeaturesSuccess: true,
+                songFeatures: action.songFeatures
+            }
+
+        case 'FETCH_MEDIUM_TERM_SONG_FEATURES_SUCCESS':
+            return {
+                ...state, 
+                fetchSongFeaturesSuccess: true,
+                songFeatures: action.songFeatures
+            }
+        
+        case 'FETCH_LONG_TERM_SONG_FEATURES_SUCCESS':
             return {
                 ...state, 
                 fetchSongFeaturesSuccess: true,
@@ -45,21 +52,12 @@ export const songfeaturesReducer = (state = initialState, action) => {
                 fetchSongFeaturesSuccess: false,
                 fetchSongFeaturesComplete: false
             }
-        
-        case 'SET_HOVERED_INDEX':
-            return {
-                ...state, 
-                hoveredIndex: action.index 
-            }
-            
-        
+
         default:
             return {
-                ...state 
+                ...state
             }
-
     }
-    
 }
 
-export default songfeaturesReducer;
+export default songFeaturesAnalysisReducer;

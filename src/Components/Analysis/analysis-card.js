@@ -3,18 +3,17 @@ import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import CardHeader from '@material-ui/core/CardHeader';
 import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 
 import AnalysisButton from './analysis-button';
-import Genres from './genres';
+import Genres from './genresAnalysis/genres';
+import Features from './songFeaturesAnalysis/features';
 
-import { fetchSongFeaturesPending, fetchSongFeaturesComplete, fetchSongFeatures } from '../../Actions/songFeaturesAction';
+import { fetchSongFeaturesPending, fetchSongFeaturesComplete, fetchSongFeatures } from '../../Actions/analysisAction';
 
 const styles = theme => ({
     root: {
         overflow: 'auto',
         width: '100%',
-        maxHeight: 1000,
         margin: '10px 0px 0px 0px'
     },
     header: {
@@ -35,11 +34,18 @@ class AnalysisCard extends React.Component {
     componentDidUpdate() {
 
         if (this.props.fetchSongsComplete && !this.props.fetchSongFeaturesComplete) {
-            const ids = this.props.songs.map(song => song.id);
+            const shortTermIds = this.props.shortTermSongs.map(song => song.id);
+            const mediumTermIds = this.props.mediumTermSongs.map(song => song.id);
+            const longTermIds = this.props.longTermSongs.map(song => song.id);
+
+            this.props.fetchSongFeaturesPending();
+
             Promise.all([
-                this.props.fetchSongFeatures(this.props.token, ids),
+                this.props.fetchSongFeatures(this.props.token, shortTermIds),
+                this.props.fetchSongFeatures(this.props.token, mediumTermIds),
+                this.props.fetchSongFeatures(tihs.props.token, longTermIds)
             ]).then(() => {
-                this.props.fetchSongFeaturesComplete;
+                this.props.fetchSongFeaturesComplete();
             });
             
         }  
@@ -51,10 +57,12 @@ class AnalysisCard extends React.Component {
         const { classes } = this.props;
 
         return (
-            <Paper className={classes.root}>
+            <Paper className={classes.root} style={{
+                height: this.props.fetchTokenSuccess ? "600px" : "0px"
+            }}>
                 <CardHeader title="Music Analysis" className={classes.header} />
                 <AnalysisButton />
-                <Genres />
+                {this.props.mode == 0 ? <Genres /> : <Features />}
             </Paper>
         )
 
@@ -65,10 +73,14 @@ class AnalysisCard extends React.Component {
 const mapStateToProps = state => {
     return {
         token: state.token.token,
+        fetchTokenSuccess: state.token.fetchTokenSuccess,
         fetchSongsComplete: state.songs.fetchSongsComplete,
-        fetchSongFeaturesComplete: state.songFeatures.fetchSongFeaturesComplete,
-        songs: state.songs.shortTermSongList,
-        songFeatures: state.songFeatures.songFeatures,
+        fetchSongFeaturesComplete: state.songFeaturesAnalysis.fetchSongFeaturesComplete,
+        shortTermSongs: state.songs.shortTermSongList,
+        mediumTermSongs: state.songs.mediumTermSongList,
+        longTermSongs: state.songs.longTermSongsList,
+        mode: state.analysis.mode,
+        songFeatures: state.songFeaturesAnalysis.shortTermSongFeatures
     };
 };
 

@@ -3,7 +3,6 @@
 // top songs is an array that will constist of json objects that map each genre to a list of top user songs associated with that genre
 const initialState = {
     topGenres: [],
-    topArtists: [],
     currentGenre: 100
 };
 
@@ -19,7 +18,7 @@ export const genreAnalysisReducer = (state = initialState, action) => {
         case "SET_TOP_GENRES":
             return {
                 ...state,
-                topGenres: action.genres 
+                topGenres: action.items 
             }
         
         default: 

@@ -7,8 +7,8 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
-import { setHoveredIndex } from '../../Actions/songFeaturesAction';
-import { setCurrentGenre } from '../../Actions/genreAnalysisAction';
+import { setHoveredIndex } from '../../../Actions/analysisAction';
+import { setCurrentGenre } from '../../../Actions/genreAnalysisAction';
 
 const styles = theme => ({
     root: {

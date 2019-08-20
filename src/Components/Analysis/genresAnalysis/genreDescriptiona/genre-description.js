@@ -18,9 +18,7 @@ export class GenreDescription extends React.Component {
 
     render() {
 
-        const currentGenre = this.props.topGenres[this.props.genre]
-
-        console.log(currentGenre);
+        const genre = this.props.genre;
 
         return (
             <Paper style={{height: 500}}>
@@ -30,17 +28,18 @@ export class GenreDescription extends React.Component {
                                 { /* This will have 3 things: the percentage, the title, and the number of songs in the saved songs list*/}
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 10px'}}>
                                     <PercentageCircle 
-                                        percentage={this.state.percentage}
+                                        percentage={genre.percentage}
                                     />
                                 </Grid>
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 0px'}} >
                                     <Title 
-                                        title={this.state.title}
+                                        title={genre.genreName}
+                                        color={genre.color}
                                     />
                                 </Grid>
                                 <Grid item xs={4} style={{padding: '10px 10px 10px 0px'}}>
                                     <SongsCircle 
-                                        numSongs={this.state.count}
+                                        numSongs={genre.count}
                                     />
                                 </Grid>
                             </Grid>
@@ -52,7 +51,7 @@ export class GenreDescription extends React.Component {
                                 </Grid>
                                 <Grid item xs={6} style={{padding: '0px 10px 10px 0px', width: '100%'}}>
                                     <TopArtists 
-                                        artists={this.state.artists}
+                                        artists={genre.topArtists}
                                     />
                                 </Grid>
                             </Grid>
@@ -64,10 +63,4 @@ export class GenreDescription extends React.Component {
 
 }
 
-const mapStateToProps = (state) => {
-    return {
-        topGenres: state.genreAnalysis.topGenres
-    }
-}
-
-export default connect(mapStateToProps, null)(GenreDescription);
+export default GenreDescription;

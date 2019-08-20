@@ -1,5 +1,4 @@
 export const setCurrentGenre = (genreIndex) => {
-    console.log(genreIndex);
     return {
         type: "SET_CURRENT_GENRE",
         index: genreIndex 
@@ -35,7 +34,7 @@ export const setTopGenres = (genres, topArtists, counts) => {
         }
 
         let count = 0;
-        for (let j = 0; j < counts.length; i++) {
+        for (let j = 0; j < counts.length; j++) {
             if (counts[j].name.toLowerCase() == genreName.toLowerCase()) {
                 count = counts[j].count;
                 break;

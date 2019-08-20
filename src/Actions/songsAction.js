@@ -158,22 +158,22 @@ export const fetchSavedSongsPending = () => {
     };
 };
 
-export const getTopSongsGenres = (albumIds, accessToken) => {
+// export const getTopSongsGenres = (albumIds, accessToken) => {
 
-        const request = new Request(`https://api.spotify.com/v1/albums/?ids=${albumIds}`, {
-            headers: new Headers({
-                'Authorization': 'Bearer ' + accessToken
-            })
-        });
+//         const request = new Request(`https://api.spotify.com/v1/albums/?ids=${albumIds}`, {
+//             headers: new Headers({
+//                 'Authorization': 'Bearer ' + accessToken
+//             })
+//         });
 
-        return dispatch => {
-            // fetch(request).then(res => {
-            //     res.json();
-            // }).then(items => {
-            //     console.log(items);
-            // });
-        }
+//         return dispatch => {
+//             // fetch(request).then(res => {
+//             //     res.json();
+//             // }).then(items => {
+//             //     console.log(items);
+//             // });
+//         }
 
-}
+// }
 
 

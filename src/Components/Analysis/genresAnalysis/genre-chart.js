@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import Paper from '@material-ui/core/Paper';
 
-import { VictoryPie, VictoryTheme, VictoryContainer, Slice } from 'victory';
+import { VictoryPie, VictoryContainer } from 'victory';
 
-import { setHoveredIndex } from '../../Actions/songFeaturesAction';
+import { setHoveredIndex } from '../../../Actions/analysisAction';
 
 export class GenreChart extends React.Component {
 
@@ -136,7 +136,7 @@ export class GenreChart extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        hoveredIndex: state.songFeatures.hoveredIndex
+        hoveredIndex: state.analysis.hoveredIndex
     };
 ;}
 
