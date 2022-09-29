@@ -32,7 +32,7 @@
     "redux-logger": "^2.10.2",
     "redux-promise-middleware": "^3.2.0",
     "redux-thunk": "^2.1.0",
-    "victory": "^32.3.3",
+    "victory": "^36.6.8",
     "webpack": "^1.12.9",
     "webpack-dev-server": "^1.14.1"
   },
